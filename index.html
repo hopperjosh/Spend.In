@@ -1,0 +1,610 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spend.in - Money Tracker</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        /* Background gradasi abu-abu ke hijau */
+        background: linear-gradient(
+          180deg,
+          #6b7280 0%,
+          #4b5563 30%,
+          #374151 60%,
+          #2f4f4f 100%
+        );
+        min-height: 100vh;
+        padding-bottom: 100px;
+      }
+
+      /* === HEADER === */
+      header {
+        background-color: rgba(255, 255, 255, 0.95);
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .menu-icon {
+        font-size: 28px;
+        cursor: pointer;
+        color: #333;
+      }
+
+      .logo-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .logo-icon {
+        font-size: 32px;
+      }
+
+      .logo-text {
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+      }
+
+      .user-profile {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .user-profile a {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .user-name {
+        font-size: 14px;
+        color: #333;
+        display: none;
+      }
+
+      .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+      }
+
+      /* === MAIN CONTAINER === */
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      /* === CARD SALDO === */
+      .balance-card {
+        background: linear-gradient(135deg, #e0e7ea 0%, #d5dfe3 100%);
+        border-radius: 20px;
+        padding: 25px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .balance-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+        color: #333;
+        font-size: 14px;
+      }
+
+      .eye-icon {
+        cursor: pointer;
+        font-size: 20px;
+      }
+
+      .balance-amount {
+        font-size: 36px;
+        font-weight: bold;
+        color: #1a4d2e;
+        margin-bottom: 5px;
+      }
+
+      .wallet-label {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        color: #555;
+        font-size: 13px;
+        margin-bottom: 20px;
+      }
+
+      .wallet-icon {
+        width: 16px;
+        height: 16px;
+        background-color: #8b4513;
+        border-radius: 3px;
+      }
+
+      .balance-buttons {
+        display: flex;
+        gap: 10px;
+      }
+
+      .pill-button {
+        flex: 1;
+        padding: 12px 15px;
+        border-radius: 25px;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        font-size: 13px;
+        transition: transform 0.2s;
+      }
+
+      .pill-button:active {
+        transform: scale(0.98);
+      }
+
+      .pill-income {
+        background-color: #2d5f4f;
+        color: white;
+      }
+
+      .pill-expense {
+        background-color: #2d5f4f;
+        color: white;
+      }
+
+      /* === TOMBOL TAMBAH TRANSAKSI === */
+      .add-transaction-btn {
+        width: 100%;
+        padding: 15px;
+        background-color: transparent;
+        border: 3px solid #5dd9a8;
+        border-radius: 15px;
+        color: #5dd9a8;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-bottom: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        transition: all 0.3s;
+      }
+
+      .add-transaction-btn:hover {
+        background-color: #5dd9a8;
+        color: white;
+      }
+
+      .plus-icon {
+        font-size: 24px;
+        font-weight: bold;
+      }
+
+      /* === CHART SECTION === */
+      .chart-section {
+        background-color: rgba(255, 255, 255, 0.05);
+        border-radius: 20px;
+        padding: 25px;
+        margin-bottom: 20px;
+      }
+
+      .chart-title {
+        text-align: center;
+        color: #fbbf24;
+        font-weight: bold;
+        margin-bottom: 20px;
+        font-size: 16px;
+      }
+
+      .chart-container {
+        position: relative;
+        height: 300px;
+        margin-bottom: 20px;
+      }
+
+      .chart-legend {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: white;
+        font-size: 13px;
+      }
+
+      .legend-color {
+        width: 20px;
+        height: 20px;
+        border-radius: 4px;
+      }
+
+      /* === TOMBOL TAMBAH SALDO === */
+      .add-balance-btn {
+        width: 100%;
+        padding: 15px;
+        background-color: #5dd9a8;
+        border: none;
+        border-radius: 15px;
+        color: white;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-bottom: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        transition: all 0.3s;
+      }
+
+      .add-balance-btn:hover {
+        background-color: #4bc294;
+      }
+
+      /* === TABEL RIWAYAT TRANSAKSI === */
+      .transaction-section {
+        background-color: #1f3d3a;
+        border-radius: 20px;
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+
+      .transaction-title {
+        color: white;
+        font-weight: bold;
+        margin-bottom: 15px;
+        font-size: 16px;
+      }
+
+      .transaction-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 15px;
+      }
+
+      .transaction-table th {
+        background-color: #2d5f4f;
+        color: white;
+        padding: 12px 8px;
+        text-align: left;
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      .transaction-table td {
+        padding: 12px 8px;
+        font-size: 13px;
+      }
+
+      .transaction-table tr.income {
+        background-color: #5dade2;
+        color: white;
+      }
+
+      .transaction-table tr.expense {
+        background-color: #e74c3c;
+        color: white;
+      }
+
+      .detail-btn {
+        width: 100%;
+        padding: 12px;
+        background-color: #2d5f4f;
+        border: none;
+        border-radius: 10px;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        transition: all 0.3s;
+      }
+
+      .detail-btn:hover {
+        background-color: #3d7f6f;
+      }
+
+      /* === FOOTER === */
+      footer {
+        background-color: rgba(255, 255, 255, 0.95);
+        padding: 30px 20px;
+        margin-top: 40px;
+      }
+
+      .footer-content {
+        max-width: 600px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .footer-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .footer-links {
+        display: flex;
+        gap: 30px;
+      }
+
+      .footer-links a {
+        color: #333;
+        text-decoration: underline;
+        font-size: 14px;
+        cursor: pointer;
+      }
+
+      .footer-links a:hover {
+        color: #2d5f4f;
+      }
+
+      /* === RESPONSIVE === */
+      @media (min-width: 480px) {
+        .user-name {
+          display: block;
+        }
+
+        .transaction-table th,
+        .transaction-table td {
+          font-size: 14px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- HEADER -->
+    <header>
+      <div class="menu-icon">☰</div>
+      <div class="logo-container">
+        <div class="logo-icon">🐔</div>
+        <div class="logo-text">Spend.in</div>
+      </div>
+      <div class="user-profile">
+        <a href="Utama/login.html">
+          <span class="user-name">Login</span>
+          <div class="user-avatar">?</div>
+        </a>
+      </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <div class="container">
+      <!-- CARD SALDO -->
+      <div class="balance-card">
+        <div class="balance-header">
+          <span>Saldo saat ini</span>
+          <span class="eye-icon">👁️</span>
+        </div>
+        <div class="balance-amount">Rp7.500.000</div>
+        <div class="wallet-label">
+          <div class="wallet-icon"></div>
+          <span>Dompet utama</span>
+        </div>
+        <div class="balance-buttons">
+          <button class="pill-button pill-income">Pemasukan Bulan Ini ➤</button>
+          <button class="pill-button pill-expense">
+            Pengeluaran Bulan Ini ➤
+          </button>
+        </div>
+      </div>
+
+      <!-- TOMBOL TAMBAH TRANSAKSI -->
+      <button
+        class="add-transaction-btn"
+        onclick="window.location.href = 'Input Transaksi/pengeluaran.html'"
+      >
+        <span>Tambah Pengeluaran</span>
+        <span class="plus-icon">⊕</span>
+      </button>
+
+      <!-- CHART DONUT -->
+      <div class="chart-section">
+        <div class="chart-title">Saldo saat ini</div>
+        <div class="chart-container">
+          <canvas id="balanceChart"></canvas>
+        </div>
+        <div class="chart-legend">
+          <div class="legend-item">
+            <div class="legend-color" style="background-color: #e74c3c"></div>
+            <span>Pengeluaran</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color" style="background-color: #3498db"></div>
+            <span>Sisa Saldo</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color" style="background-color: #f39c12"></div>
+            <span>Investasi</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOMBOL TAMBAH SALDO -->
+      <button
+        class="add-balance-btn"
+        onclick="window.location.href = 'Input Saldo/pemasukan.html'"
+      >
+        <span>Tambah Saldo</span>
+        <span class="plus-icon">⊕</span>
+      </button>
+
+      <!-- TABEL RIWAYAT TRANSAKSI -->
+      <div class="transaction-section">
+        <div class="transaction-title">Riwayat Transaksi</div>
+        <table class="transaction-table">
+          <thead>
+            <tr>
+              <th>Tanggal</th>
+              <th>Jenis</th>
+              <th>Kategori</th>
+              <th>Jumlah</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="income">
+              <td>18/1/2026</td>
+              <td>Pemasukan</td>
+              <td>Gaji</td>
+              <td>+Rp1.000.000</td>
+            </tr>
+            <tr class="expense">
+              <td>18/1/2026</td>
+              <td>Pengeluaran</td>
+              <td>Makan</td>
+              <td>-Rp15.000.000</td>
+            </tr>
+          </tbody>
+        </table>
+        <button class="detail-btn">Klik disini untuk melihat detail ➤</button>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-content">
+        <div class="footer-logo">
+          <div class="logo-icon">🐔</div>
+          <div class="logo-text">Spend.in</div>
+        </div>
+        <div class="footer-links">
+          <a href="#contact">Contact</a>
+          <a href="#about">About Us</a>
+          <a href="#follow">Follow Us</a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // === CHART.JS CONFIGURATION ===
+      // Data untuk chart donut
+      const chartData = {
+        labels: ["Pengeluaran", "Sisa Saldo", "Investasi"],
+        datasets: [
+          {
+            data: [2500000, 2500000, 2500000], // Data dummy dalam Rupiah
+            backgroundColor: [
+              "#e74c3c", // Merah untuk Pengeluaran
+              "#3498db", // Biru untuk Sisa Saldo
+              "#f39c12", // Kuning untuk Investasi
+            ],
+            borderWidth: 0,
+          },
+        ],
+      };
+
+      // Konfigurasi chart
+      const config = {
+        type: "doughnut",
+        data: chartData,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false, // Legend dibuat manual di HTML
+            },
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  let label = context.label || "";
+                  if (label) {
+                    label += ": ";
+                  }
+                  // Format angka ke Rupiah
+                  label += "Rp" + context.parsed.toLocaleString("id-ID");
+                  return label;
+                },
+              },
+            },
+          },
+          cutout: "60%", // Ukuran lubang di tengah donut
+        },
+      };
+
+      // Render chart
+      const balanceChart = new Chart(
+        document.getElementById("balanceChart"),
+        config,
+      );
+
+      // === EVENT LISTENERS ===
+      // Toggle visibility saldo (ikon mata)
+      document
+        .querySelector(".eye-icon")
+        .addEventListener("click", function () {
+          const balanceAmount = document.querySelector(".balance-amount");
+          if (balanceAmount.textContent === "Rp7.500.000") {
+            balanceAmount.textContent = "Rp•••••••";
+          } else {
+            balanceAmount.textContent = "Rp7.500.000";
+          }
+        });
+
+      // Event untuk tombol-tombol (bisa dikembangkan lebih lanjut)
+      document
+        .querySelector(".add-transaction-btn")
+        .addEventListener("click", function () {
+          alert("Anda akan masuk ke halaman pengeluaran!");
+        });
+
+      document
+        .querySelector(".add-balance-btn")
+        .addEventListener("click", function () {
+          alert("Anda akan masuk ke halaman penginputan saldo!");
+        });
+
+      document
+        .querySelector(".detail-btn")
+        .addEventListener("click", function () {
+          alert("Menampilkan detail transaksi...");
+        });
+
+      // Event untuk pill buttons
+      document.querySelectorAll(".pill-button").forEach((button) => {
+        button.addEventListener("click", function () {
+          alert("Fitur " + this.textContent.trim() + " akan segera hadir!");
+        });
+      });
+    </script>
+  </body>
+</html>

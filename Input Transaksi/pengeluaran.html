@@ -1,0 +1,650 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pengeluaran Bulan Ini - Spend.in</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        /* Background gradasi abu-abu ke hijau */
+        background: linear-gradient(
+          180deg,
+          #6b7280 0%,
+          #4b5563 30%,
+          #374151 60%,
+          #2f4f4f 100%
+        );
+        min-height: 100vh;
+        padding-bottom: 100px;
+      }
+
+      /* === HEADER === */
+      header {
+        background-color: rgba(255, 255, 255, 0.95);
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .back-button {
+        font-size: 24px;
+        cursor: pointer;
+        color: #333;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .back-button:hover {
+        opacity: 0.7;
+      }
+
+      .header-title {
+        font-size: 20px;
+        font-weight: bold;
+        color: #333;
+      }
+
+      .header-spacer {
+        width: 30px;
+      }
+
+      /* === MAIN CONTAINER === */
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      /* === SUMMARY CARD (MERAH UNTUK PENGELUARAN) === */
+      .summary-card {
+        background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        border-radius: 20px;
+        padding: 30px;
+        margin-bottom: 25px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        color: white;
+      }
+
+      .summary-label {
+        font-size: 14px;
+        opacity: 0.9;
+        margin-bottom: 10px;
+      }
+
+      .summary-amount {
+        font-size: 42px;
+        font-weight: bold;
+        margin-bottom: 15px;
+      }
+
+      .summary-period {
+        font-size: 13px;
+        opacity: 0.8;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .summary-stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-top: 20px;
+      }
+
+      .stat-item {
+        background: rgba(255, 255, 255, 0.15);
+        padding: 15px;
+        border-radius: 12px;
+        backdrop-filter: blur(10px);
+      }
+
+      .stat-label {
+        font-size: 12px;
+        opacity: 0.9;
+        margin-bottom: 5px;
+      }
+
+      .stat-value {
+        font-size: 20px;
+        font-weight: bold;
+      }
+
+      /* === ADD BUTTON === */
+      .add-expense-btn {
+        width: 100%;
+        padding: 16px;
+        background: linear-gradient(135deg, #5dd9a8 0%, #4bc294 100%);
+        border: none;
+        border-radius: 15px;
+        color: white;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-bottom: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        transition: all 0.3s;
+        box-shadow: 0 4px 15px rgba(93, 217, 168, 0.3);
+      }
+
+      .add-expense-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(93, 217, 168, 0.4);
+      }
+
+      /* === CHART SECTION === */
+      .chart-section {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        margin-bottom: 25px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .chart-title {
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 20px;
+      }
+
+      .chart-container {
+        position: relative;
+        height: 250px;
+      }
+
+      /* === CATEGORY BREAKDOWN === */
+      .category-section {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        margin-bottom: 25px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .category-title {
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 20px;
+      }
+
+      .category-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 15px;
+        margin-bottom: 12px;
+        background: #f8f9fa;
+        border-radius: 12px;
+        transition: all 0.3s;
+      }
+
+      .category-item:hover {
+        background: #ffe8e8;
+        transform: translateX(5px);
+      }
+
+      .category-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+      }
+
+      .category-info {
+        flex: 1;
+      }
+
+      .category-name {
+        font-size: 15px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 4px;
+      }
+
+      .category-count {
+        font-size: 12px;
+        color: #999;
+      }
+
+      .category-amount {
+        font-size: 18px;
+        font-weight: bold;
+        color: #e74c3c;
+      }
+
+      /* === TRANSACTION LIST === */
+      .transaction-section {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .transaction-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .transaction-title {
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+      }
+
+      .filter-btn {
+        padding: 8px 15px;
+        border: 2px solid #e0e0e0;
+        background: white;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        color: #666;
+        transition: all 0.3s;
+      }
+
+      .filter-btn:hover {
+        border-color: #e74c3c;
+        color: #e74c3c;
+      }
+
+      .transaction-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 15px;
+        margin-bottom: 10px;
+        border-radius: 12px;
+        border: 2px solid #f0f0f0;
+        transition: all 0.3s;
+      }
+
+      .transaction-item:hover {
+        border-color: #e74c3c;
+        background: #fff8f8;
+      }
+
+      .transaction-icon {
+        width: 45px;
+        height: 45px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+      }
+
+      .transaction-info {
+        flex: 1;
+      }
+
+      .transaction-name {
+        font-size: 15px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 3px;
+      }
+
+      .transaction-date {
+        font-size: 12px;
+        color: #999;
+      }
+
+      .transaction-amount {
+        font-size: 18px;
+        font-weight: bold;
+        color: #e74c3c;
+      }
+
+      /* === RESPONSIVE === */
+      @media (min-width: 768px) {
+        .container {
+          padding: 30px;
+        }
+
+        .summary-amount {
+          font-size: 48px;
+        }
+
+        .summary-stats {
+          grid-template-columns: repeat(4, 1fr);
+        }
+
+        .chart-container {
+          height: 300px;
+        }
+      }
+
+      @media (min-width: 1024px) {
+        .container {
+          padding: 40px;
+        }
+
+        .content-grid {
+          display: grid;
+          grid-template-columns: 2fr 1fr;
+          gap: 25px;
+        }
+
+        .left-column {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .right-column {
+          display: flex;
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- HEADER -->
+    <header>
+      <a href="../index.html" class="back-button">←</a>
+      <div class="header-title">Pengeluaran Bulan Ini</div>
+      <div class="header-spacer"></div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <div class="container">
+      <!-- SUMMARY CARD -->
+      <div class="summary-card">
+        <div class="summary-label">Total Pengeluaran</div>
+        <div class="summary-amount">Rp12.350.000</div>
+        <div class="summary-period">📅 Januari 2026</div>
+
+        <div class="summary-stats">
+          <div class="stat-item">
+            <div class="stat-label">Transaksi</div>
+            <div class="stat-value">24</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Rata-rata</div>
+            <div class="stat-value">514K</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Terbesar</div>
+            <div class="stat-value">3.5M</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Terkecil</div>
+            <div class="stat-value">15K</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADD EXPENSE BUTTON -->
+      <button
+        class="add-expense-btn"
+        onclick="window.location.href = 'tambah-pengeluaran.html'"
+      >
+        <span>Tambah Pengeluaran</span>
+        <span style="font-size: 24px">+</span>
+      </button>
+
+      <div class="content-grid">
+        <div class="left-column">
+          <!-- CHART SECTION -->
+          <div class="chart-section">
+            <div class="chart-title">Tren Pengeluaran</div>
+            <div class="chart-container">
+              <canvas id="expenseChart"></canvas>
+            </div>
+          </div>
+
+          <!-- TRANSACTION LIST -->
+          <div class="transaction-section">
+            <div class="transaction-header">
+              <div class="transaction-title">Riwayat Transaksi</div>
+              <button class="filter-btn">Filter 🔽</button>
+            </div>
+
+            <!-- Transaction Items -->
+            <div class="transaction-item">
+              <div class="transaction-icon">🏠</div>
+              <div class="transaction-info">
+                <div class="transaction-name">Bayar Sewa Kost</div>
+                <div class="transaction-date">22 Jan 2026</div>
+              </div>
+              <div class="transaction-amount">-Rp3.500.000</div>
+            </div>
+
+            <div class="transaction-item">
+              <div class="transaction-icon">🍔</div>
+              <div class="transaction-info">
+                <div class="transaction-name">Makan di Restoran</div>
+                <div class="transaction-date">21 Jan 2026</div>
+              </div>
+              <div class="transaction-amount">-Rp250.000</div>
+            </div>
+
+            <div class="transaction-item">
+              <div class="transaction-icon">🚗</div>
+              <div class="transaction-info">
+                <div class="transaction-name">Bensin & Parkir</div>
+                <div class="transaction-date">20 Jan 2026</div>
+              </div>
+              <div class="transaction-amount">-Rp150.000</div>
+            </div>
+
+            <div class="transaction-item">
+              <div class="transaction-icon">🛒</div>
+              <div class="transaction-info">
+                <div class="transaction-name">Belanja Bulanan</div>
+                <div class="transaction-date">18 Jan 2026</div>
+              </div>
+              <div class="transaction-amount">-Rp1.200.000</div>
+            </div>
+
+            <div class="transaction-item">
+              <div class="transaction-icon">💊</div>
+              <div class="transaction-info">
+                <div class="transaction-name">Beli Obat</div>
+                <div class="transaction-date">17 Jan 2026</div>
+              </div>
+              <div class="transaction-amount">-Rp85.000</div>
+            </div>
+
+            <div class="transaction-item">
+              <div class="transaction-icon">📱</div>
+              <div class="transaction-info">
+                <div class="transaction-name">Paket Internet</div>
+                <div class="transaction-date">15 Jan 2026</div>
+              </div>
+              <div class="transaction-amount">-Rp100.000</div>
+            </div>
+
+            <div class="transaction-item">
+              <div class="transaction-icon">👕</div>
+              <div class="transaction-info">
+                <div class="transaction-name">Beli Baju</div>
+                <div class="transaction-date">12 Jan 2026</div>
+              </div>
+              <div class="transaction-amount">-Rp350.000</div>
+            </div>
+
+            <div class="transaction-item">
+              <div class="transaction-icon">☕</div>
+              <div class="transaction-info">
+                <div class="transaction-name">Kopi & Snack</div>
+                <div class="transaction-date">10 Jan 2026</div>
+              </div>
+              <div class="transaction-amount">-Rp45.000</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="right-column">
+          <!-- CATEGORY BREAKDOWN -->
+          <div class="category-section">
+            <div class="category-title">Berdasarkan Kategori</div>
+
+            <div class="category-item">
+              <div class="category-icon">🏠</div>
+              <div class="category-info">
+                <div class="category-name">Tempat Tinggal</div>
+                <div class="category-count">2 transaksi</div>
+              </div>
+              <div class="category-amount">3.5M</div>
+            </div>
+
+            <div class="category-item">
+              <div class="category-icon">🍔</div>
+              <div class="category-info">
+                <div class="category-name">Makanan</div>
+                <div class="category-count">8 transaksi</div>
+              </div>
+              <div class="category-amount">2.8M</div>
+            </div>
+
+            <div class="category-item">
+              <div class="category-icon">🚗</div>
+              <div class="category-info">
+                <div class="category-name">Transportasi</div>
+                <div class="category-count">5 transaksi</div>
+              </div>
+              <div class="category-amount">1.5M</div>
+            </div>
+
+            <div class="category-item">
+              <div class="category-icon">🛒</div>
+              <div class="category-info">
+                <div class="category-name">Belanja</div>
+                <div class="category-count">4 transaksi</div>
+              </div>
+              <div class="category-amount">2.1M</div>
+            </div>
+
+            <div class="category-item">
+              <div class="category-icon">💊</div>
+              <div class="category-info">
+                <div class="category-name">Kesehatan</div>
+                <div class="category-count">3 transaksi</div>
+              </div>
+              <div class="category-amount">850K</div>
+            </div>
+
+            <div class="category-item">
+              <div class="category-icon">🎮</div>
+              <div class="category-info">
+                <div class="category-name">Hiburan</div>
+                <div class="category-count">2 transaksi</div>
+              </div>
+              <div class="category-amount">1.6M</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // === CHART.JS - EXPENSE TREND ===
+      const ctx = document.getElementById("expenseChart").getContext("2d");
+
+      const expenseChart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: ["1 Jan", "5 Jan", "10 Jan", "15 Jan", "20 Jan", "25 Jan"],
+          datasets: [
+            {
+              label: "Pengeluaran",
+              data: [0, 1500000, 3800000, 7200000, 10500000, 12350000],
+              borderColor: "#e74c3c",
+              backgroundColor: "rgba(231, 76, 60, 0.1)",
+              tension: 0.4,
+              fill: true,
+              pointRadius: 5,
+              pointHoverRadius: 7,
+              pointBackgroundColor: "#e74c3c",
+              pointBorderColor: "#fff",
+              pointBorderWidth: 2,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false,
+            },
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  return "Rp" + context.parsed.y.toLocaleString("id-ID");
+                },
+              },
+            },
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                callback: function (value) {
+                  return "Rp" + (value / 1000000).toFixed(1) + "M";
+                },
+              },
+            },
+          },
+        },
+      });
+
+      // === EVENT LISTENERS ===
+      document
+        .querySelector(".add-expense-btn")
+        .addEventListener("click", function () {
+          window.location.href = "tambah-pengeluaran.html";
+        });
+
+      document
+        .querySelector(".filter-btn")
+        .addEventListener("click", function () {
+          alert(
+            "Filter transaksi:\n- Semua\n- Minggu ini\n- Bulan ini\n- Custom date",
+          );
+        });
+
+      // Transaction items click
+      document.querySelectorAll(".transaction-item").forEach((item) => {
+        item.addEventListener("click", function () {
+          alert("Detail transaksi akan ditampilkan di sini");
+        });
+      });
+
+      // Category items click
+      document.querySelectorAll(".category-item").forEach((item) => {
+        item.addEventListener("click", function () {
+          alert("Filter berdasarkan kategori ini");
+        });
+      });
+    </script>
+  </body>
+</html>

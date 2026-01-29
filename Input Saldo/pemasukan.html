@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pemasukan Bulan Ini - Spend.in</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        /* Background gradasi abu-abu ke hijau */
+        background: linear-gradient(
+          180deg,
+          #6b7280 0%,
+          #4b5563 30%,
+          #374151 60%,
+          #2f4f4f 100%
+        );
+        min-height: 100vh;
+        padding-bottom: 100px;
+      }
+
+      /* === HEADER === */
+      header {
+        background-color: rgba(255, 255, 255, 0.95);
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .back-button {
+        font-size: 24px;
+        cursor: pointer;
+        color: #333;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .back-button:hover {
+        opacity: 0.7;
+      }
+
+      .header-title {
+        font-size: 20px;
+        font-weight: bold;
+        color: #333;
+      }
+
+      .header-spacer {
+        width: 30px;
+      }
+
+      /* === MAIN CONTAINER === */
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      /* === SUMMARY CARD === */
+      .summary-card {
+        background: linear-gradient(135deg, #5dade2 0%, #4a9fd8 100%);
+        border-radius: 20px;
+        padding: 30px;
+        margin-bottom: 25px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        color: white;
+      }
+
+      .summary-label {
+        font-size: 14px;
+        opacity: 0.9;
+        margin-bottom: 10px;
+      }
+
+      .summary-amount {
+        font-size: 42px;
+        font-weight: bold;
+        margin-bottom: 15px;
+      }
+
+      .summary-period {
+        font-size: 13px;
+        opacity: 0.8;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .summary-stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-top: 20px;
+      }
+
+      .stat-item {
+        background: rgba(255, 255, 255, 0.15);
+        padding: 15px;
+        border-radius: 12px;
+        backdrop-filter: blur(10px);
+      }
+
+      .stat-label {
+        font-size: 12px;
+        opacity: 0.9;
+        margin-bottom: 5px;
+      }
+
+      .stat-value {
+        font-size: 20px;
+        font-weight: bold;
+      }
+
+      /* === ADD BUTTON === */
+      .add-income-btn {
+        width: 100%;
+        padding: 16px;
+        background: linear-gradient(135deg, #5dd9a8 0%, #4bc294 100%);
+        border: none;
+        border-radius: 15px;
+        color: white;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-bottom: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        transition: all 0.3s;
+        box-shadow: 0 4px 15px rgba(93, 217, 168, 0.3);
+      }
+
+      .add-income-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(93, 217, 168, 0.4);
+      }
+
+      /* === CHART SECTION === */
+      .chart-section {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        margin-bottom: 25px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .chart-title {
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 20px;
+      }
+
+      .chart-container {
+        position: relative;
+        height: 250px;
+      }
+
+      /* === CATEGORY BREAKDOWN === */
+      .category-section {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        margin-bottom: 25px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .category-title {
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 20px;
+      }
+
+      .category-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 15px;
+        margin-bottom: 12px;
+        background: #f8f9fa;
+        border-radius: 12px;
+        transition: all 0.3s;
+      }
+
+      .category-item:hover {
+        background: #e8f5e9;
+        transform: translateX(5px);
+      }
+
+      .category-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        background: linear-gradient(135deg, #5dade2 0%, #4a9fd8 100%);
+      }
+
+      .category-info {
+        flex: 1;
+      }
+
+      .category-name {
+        font-size: 15px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 4px;
+      }
+
+      .category-count {
+        font-size: 12px;
+        color: #999;
+      }
+
+      .category-amount {
+        font-size: 18px;
+        font-weight: bold;
+        color: #5dade2;
+      }
+
+      /* === TRANSACTION LIST === */
+      .transaction-section {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .transaction-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .transaction-title {
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+      }
+
+      .filter-btn {
+        padding: 8px 15px;
+        border: 2px solid #e0e0e0;
+        background: white;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        color: #666;
+        transition: all 0.3s;
+      }
+
+      .filter-btn:hover {
+        border-color: #5dade2;
+        color: #5dade2;
+      }
+
+      .transaction-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 15px;
+        margin-bottom: 10px;
+        border-radius: 12px;
+        border: 2px solid #f0f0f0;
+        transition: all 0.3s;
+      }
+
+      .transaction-item:hover {
+        border-color: #5dade2;
+        background: #f8fbff;
+      }
+
+      .transaction-icon {
+        width: 45px;
+        height: 45px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        background: linear-gradient(135deg, #5dade2 0%, #4a9fd8 100%);
+      }
+
+      .transaction-info {
+        flex: 1;
+      }
+
+      .transaction-name {
+        font-size: 15px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 3px;
+      }
+
+      .transaction-date {
+        font-size: 12px;
+        color: #999;
+      }
+
+      .transaction-amount {
+        font-size: 18px;
+        font-weight: bold;
+        color: #5dade2;
+      }
+
+      /* === EMPTY STATE === */
+      .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: #999;
+      }
+
+      .empty-icon {
+        font-size: 60px;
+        margin-bottom: 15px;
+        opacity: 0.5;
+      }
+
+      .empty-text {
+        font-size: 16px;
+      }
+
+      /* === RESPONSIVE === */
+      @media (min-width: 768px) {
+        .container {
+          padding: 30px;
+        }
+
+        .summary-amount {
+          font-size: 48px;
+        }
+
+        .summary-stats {
+          grid-template-columns: repeat(4, 1fr);
+        }
+
+        .chart-container {
+          height: 300px;
+        }
+      }
+
+      @media (min-width: 1024px) {
+        .container {
+          padding: 40px;
+        }
+
+        .content-grid {
+          display: grid;
+          grid-template-columns: 2fr 1fr;
+          gap: 25px;
+        }
+
+        .left-column {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .right-column {
+          display: flex;
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- HEADER -->
+    <header>
+      <a href="../index.html" class="back-button">←</a>
+      <div class="header-title">Pemasukan Bulan Ini</div>
+      <div class="header-spacer"></div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <div class="container">
+      <!-- SUMMARY CARD -->
+      <div class="summary-card">
+        <div class="summary-label">Total Pemasukan</div>
+        <div class="summary-amount">Rp8.500.000</div>
+        <div class="summary-period">📅 Januari 2026</div>
+
+        <div class="summary-stats">
+          <div class="stat-item">
+            <div class="stat-label">Transaksi</div>
+            <div class="stat-value">12</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Rata-rata</div>
+            <div class="stat-value">708K</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Terbesar</div>
+            <div class="stat-value">5.0M</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Terkecil</div>
+            <div class="stat-value">50K</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADD INCOME BUTTON -->
+      <button class="add-income-btn">
+        <span>Tambah Pemasukan</span>
+        <span style="font-size: 24px">+</span>
+      </button>
+
+      <div class="content-grid">
+        <div class="left-column">
+          <!-- CHART SECTION -->
+          <div class="chart-section">
+            <div class="chart-title">Tren Pemasukan</div>
+            <div class="chart-container">
+              <canvas id="incomeChart"></canvas>
+            </div>
+          </div>
+
+          <!-- TRANSACTION LIST -->
+          <div class="transaction-section">
+            <div class="transaction-header">
+              <div class="transaction-title">Riwayat Transaksi</div>
+              <button class="filter-btn">Filter 🔽</button>
+            </div>
+
+            <!-- Transaction Items -->
+            <div class="transaction-item">
+              <div class="transaction-icon">💰</div>
+              <div class="transaction-info">
+                <div class="transaction-name">Gaji Bulanan</div>
+                <div class="transaction-date">20 Jan 2026</div>
+              </div>
+              <div class="transaction-amount">+Rp5.000.000</div>
+            </div>
+
+            <div class="transaction-item">
+              <div class="transaction-icon">💼</div>
+              <div class="transaction-info">
+                <div class="transaction-name">Freelance Project</div>
+                <div class="transaction-date">18 Jan 2026</div>
+              </div>
+              <div class="transaction-amount">+Rp2.500.000</div>
+            </div>
+
+            <div class="transaction-item">
+              <div class="transaction-icon">🎁</div>
+              <div class="transaction-info">
+                <div class="transaction-name">Bonus</div>
+                <div class="transaction-date">15 Jan 2026</div>
+              </div>
+              <div class="transaction-amount">+Rp500.000</div>
+            </div>
+
+            <div class="transaction-item">
+              <div class="transaction-icon">📈</div>
+              <div class="transaction-info">
+                <div class="transaction-name">Dividen Investasi</div>
+                <div class="transaction-date">10 Jan 2026</div>
+              </div>
+              <div class="transaction-amount">+Rp300.000</div>
+            </div>
+
+            <div class="transaction-item">
+              <div class="transaction-icon">🛍️</div>
+              <div class="transaction-info">
+                <div class="transaction-name">Penjualan Online</div>
+                <div class="transaction-date">8 Jan 2026</div>
+              </div>
+              <div class="transaction-amount">+Rp200.000</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="right-column">
+          <!-- CATEGORY BREAKDOWN -->
+          <div class="category-section">
+            <div class="category-title">Berdasarkan Kategori</div>
+
+            <div class="category-item">
+              <div class="category-icon">💰</div>
+              <div class="category-info">
+                <div class="category-name">Gaji</div>
+                <div class="category-count">1 transaksi</div>
+              </div>
+              <div class="category-amount">5.0M</div>
+            </div>
+
+            <div class="category-item">
+              <div class="category-icon">💼</div>
+              <div class="category-info">
+                <div class="category-name">Freelance</div>
+                <div class="category-count">3 transaksi</div>
+              </div>
+              <div class="category-amount">2.5M</div>
+            </div>
+
+            <div class="category-item">
+              <div class="category-icon">📈</div>
+              <div class="category-info">
+                <div class="category-name">Investasi</div>
+                <div class="category-count">4 transaksi</div>
+              </div>
+              <div class="category-amount">600K</div>
+            </div>
+
+            <div class="category-item">
+              <div class="category-icon">🎁</div>
+              <div class="category-info">
+                <div class="category-name">Bonus</div>
+                <div class="category-count">2 transaksi</div>
+              </div>
+              <div class="category-amount">300K</div>
+            </div>
+
+            <div class="category-item">
+              <div class="category-icon">🛍️</div>
+              <div class="category-info">
+                <div class="category-name">Penjualan</div>
+                <div class="category-count">2 transaksi</div>
+              </div>
+              <div class="category-amount">100K</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // === CHART.JS - INCOME TREND ===
+      const ctx = document.getElementById("incomeChart").getContext("2d");
+
+      const incomeChart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: ["1 Jan", "5 Jan", "10 Jan", "15 Jan", "20 Jan", "25 Jan"],
+          datasets: [
+            {
+              label: "Pemasukan",
+              data: [0, 500000, 800000, 1300000, 6300000, 8500000],
+              borderColor: "#5dade2",
+              backgroundColor: "rgba(93, 173, 226, 0.1)",
+              tension: 0.4,
+              fill: true,
+              pointRadius: 5,
+              pointHoverRadius: 7,
+              pointBackgroundColor: "#5dade2",
+              pointBorderColor: "#fff",
+              pointBorderWidth: 2,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false,
+            },
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  return "Rp" + context.parsed.y.toLocaleString("id-ID");
+                },
+              },
+            },
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                callback: function (value) {
+                  return "Rp" + (value / 1000000).toFixed(1) + "M";
+                },
+              },
+            },
+          },
+        },
+      });
+
+      // === EVENT LISTENERS ===
+      document
+        .querySelector(".add-income-btn")
+        .addEventListener("click", function () {
+          window.location.href = "tambah-pemasukan.html";
+        });
+
+      document
+        .querySelector(".filter-btn")
+        .addEventListener("click", function () {
+          alert(
+            "Filter transaksi:\n- Semua\n- Minggu ini\n- Bulan ini\n- Custom date",
+          );
+        });
+
+      // Transaction items click
+      document.querySelectorAll(".transaction-item").forEach((item) => {
+        item.addEventListener("click", function () {
+          alert("Detail transaksi akan ditampilkan di sini");
+        });
+      });
+
+      // Category items click
+      document.querySelectorAll(".category-item").forEach((item) => {
+        item.addEventListener("click", function () {
+          alert("Filter berdasarkan kategori ini");
+        });
+      });
+    </script>
+  </body>
+</html>
