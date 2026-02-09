@@ -634,3 +634,641 @@ ${description ? "Catatan: " + description : ""}`);
     </script>
   </body>
 </html>
+=======
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tambah Pemasukan - Spend.in</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        /* Background gradasi abu-abu ke hijau */
+        background: linear-gradient(
+          180deg,
+          #6b7280 0%,
+          #4b5563 30%,
+          #374151 60%,
+          #2f4f4f 100%
+        );
+        min-height: 100vh;
+        padding-bottom: 50px;
+      }
+
+      /* === HEADER === */
+      header {
+        background-color: rgba(255, 255, 255, 0.95);
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .back-button {
+        font-size: 24px;
+        cursor: pointer;
+        color: #333;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .back-button:hover {
+        opacity: 0.7;
+      }
+
+      .header-title {
+        font-size: 20px;
+        font-weight: bold;
+        color: #333;
+      }
+
+      .header-spacer {
+        width: 30px;
+      }
+
+      /* === MAIN CONTAINER === */
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      /* === FORM CARD === */
+      .form-card {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .form-header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .form-icon {
+        font-size: 60px;
+        margin-bottom: 15px;
+      }
+
+      .form-title {
+        font-size: 24px;
+        font-weight: bold;
+        color: #1a4d2e;
+        margin-bottom: 8px;
+      }
+
+      .form-subtitle {
+        font-size: 14px;
+        color: #666;
+      }
+
+      /* === FORM STYLES === */
+      .form-group {
+        margin-bottom: 25px;
+      }
+
+      .form-label {
+        display: block;
+        font-size: 14px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 8px;
+      }
+
+      .required {
+        color: #e74c3c;
+      }
+
+      .form-input,
+      .form-select,
+      .form-textarea {
+        width: 100%;
+        padding: 14px 16px;
+        font-size: 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 12px;
+        outline: none;
+        transition: all 0.3s;
+        font-family: inherit;
+      }
+
+      .form-input:focus,
+      .form-select:focus,
+      .form-textarea:focus {
+        border-color: #5dade2;
+        box-shadow: 0 0 0 3px rgba(93, 173, 226, 0.1);
+      }
+
+      .form-textarea {
+        resize: vertical;
+        min-height: 100px;
+      }
+
+      /* === AMOUNT INPUT SPECIAL === */
+      .amount-input-wrapper {
+        position: relative;
+      }
+
+      .currency-prefix {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 15px;
+        font-weight: 600;
+        color: #5dade2;
+      }
+
+      .amount-input {
+        padding-left: 45px;
+        font-size: 24px;
+        font-weight: bold;
+        color: #5dade2;
+      }
+
+      /* === CATEGORY GRID === */
+      .category-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+      }
+
+      .category-item {
+        padding: 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 12px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        background: white;
+      }
+
+      .category-item:hover {
+        border-color: #5dade2;
+        background: #f8fbff;
+      }
+
+      .category-item.active {
+        border-color: #5dade2;
+        background: linear-gradient(135deg, #5dade2 0%, #4a9fd8 100%);
+        color: white;
+      }
+
+      .category-item-icon {
+        font-size: 28px;
+        margin-bottom: 8px;
+      }
+
+      .category-item-name {
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      /* === DATE INPUT === */
+      .date-input {
+        cursor: pointer;
+      }
+
+      /* === BUTTONS === */
+      .form-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 30px;
+      }
+
+      .btn-cancel {
+        flex: 1;
+        padding: 16px;
+        border: 2px solid #e0e0e0;
+        background: white;
+        color: #666;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .btn-cancel:hover {
+        border-color: #999;
+        color: #333;
+      }
+
+      .btn-submit {
+        flex: 2;
+        padding: 16px;
+        border: none;
+        background: linear-gradient(135deg, #5dade2 0%, #4a9fd8 100%);
+        color: white;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+        box-shadow: 0 4px 15px rgba(93, 173, 226, 0.3);
+      }
+
+      .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(93, 173, 226, 0.4);
+      }
+
+      .btn-submit:active {
+        transform: translateY(0);
+      }
+
+      /* === QUICK AMOUNT BUTTONS === */
+      .quick-amounts {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+
+      .quick-amount-btn {
+        padding: 10px;
+        border: 2px solid #e0e0e0;
+        background: white;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        color: #666;
+      }
+
+      .quick-amount-btn:hover {
+        border-color: #5dade2;
+        color: #5dade2;
+      }
+
+      /* === INFO BOX === */
+      .info-box {
+        background: #e8f5e9;
+        border-left: 4px solid #5dd9a8;
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 20px;
+        font-size: 13px;
+        color: #2d5f4f;
+      }
+
+      .info-box-title {
+        font-weight: 600;
+        margin-bottom: 5px;
+      }
+
+      /* === RESPONSIVE === */
+      @media (max-width: 480px) {
+        .form-card {
+          padding: 25px 20px;
+        }
+
+        .category-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .amount-input {
+          font-size: 20px;
+        }
+
+        .quick-amounts {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (min-width: 768px) {
+        .container {
+          padding: 40px 20px;
+        }
+
+        .form-card {
+          padding: 40px;
+        }
+
+        .category-grid {
+          grid-template-columns: repeat(4, 1fr);
+        }
+      }
+
+      /* === ANIMATIONS === */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .form-card {
+        animation: fadeInUp 0.5s ease-out;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- HEADER -->
+    <header>
+      <a href="pemasukan.html" class="back-button">←</a>
+      <div class="header-title">Tambah Pemasukan</div>
+      <div class="header-spacer"></div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <div class="container">
+      <div class="form-card">
+        <!-- FORM HEADER -->
+        <div class="form-header">
+          <div class="form-icon">💰</div>
+          <h1 class="form-title">Tambah Pemasukan</h1>
+          <p class="form-subtitle">Catat sumber pendapatan Anda</p>
+        </div>
+
+        <!-- FORM -->
+        <form id="incomeForm">
+          <!-- JUMLAH -->
+          <div class="form-group">
+            <label class="form-label" for="amount">
+              Jumlah <span class="required">*</span>
+            </label>
+            <div class="quick-amounts">
+              <button
+                type="button"
+                class="quick-amount-btn"
+                data-amount="50000"
+              >
+                50K
+              </button>
+              <button
+                type="button"
+                class="quick-amount-btn"
+                data-amount="100000"
+              >
+                100K
+              </button>
+              <button
+                type="button"
+                class="quick-amount-btn"
+                data-amount="500000"
+              >
+                500K
+              </button>
+              <button
+                type="button"
+                class="quick-amount-btn"
+                data-amount="1000000"
+              >
+                1M
+              </button>
+              <button
+                type="button"
+                class="quick-amount-btn"
+                data-amount="5000000"
+              >
+                5M
+              </button>
+              <button
+                type="button"
+                class="quick-amount-btn"
+                data-amount="10000000"
+              >
+                10M
+              </button>
+            </div>
+            <div class="amount-input-wrapper">
+              <span class="currency-prefix">Rp</span>
+              <input
+                type="number"
+                id="amount"
+                class="form-input amount-input"
+                placeholder="0"
+                required
+                min="1"
+              />
+            </div>
+          </div>
+
+          <!-- KATEGORI -->
+          <div class="form-group">
+            <label class="form-label">
+              Kategori <span class="required">*</span>
+            </label>
+            <div class="category-grid">
+              <div class="category-item" data-category="gaji">
+                <div class="category-item-icon">💰</div>
+                <div class="category-item-name">Gaji</div>
+              </div>
+              <div class="category-item" data-category="freelance">
+                <div class="category-item-icon">💼</div>
+                <div class="category-item-name">Freelance</div>
+              </div>
+              <div class="category-item" data-category="investasi">
+                <div class="category-item-icon">📈</div>
+                <div class="category-item-name">Investasi</div>
+              </div>
+              <div class="category-item" data-category="bonus">
+                <div class="category-item-icon">🎁</div>
+                <div class="category-item-name">Bonus</div>
+              </div>
+              <div class="category-item" data-category="penjualan">
+                <div class="category-item-icon">🛍️</div>
+                <div class="category-item-name">Penjualan</div>
+              </div>
+              <div class="category-item" data-category="hadiah">
+                <div class="category-item-icon">🎉</div>
+                <div class="category-item-name">Hadiah</div>
+              </div>
+              <div class="category-item" data-category="refund">
+                <div class="category-item-icon">↩️</div>
+                <div class="category-item-name">Refund</div>
+              </div>
+              <div class="category-item" data-category="lainnya">
+                <div class="category-item-icon">📦</div>
+                <div class="category-item-name">Lainnya</div>
+              </div>
+            </div>
+            <input type="hidden" id="category" name="category" required />
+          </div>
+
+          <!-- TANGGAL -->
+          <div class="form-group">
+            <label class="form-label" for="date">
+              Tanggal <span class="required">*</span>
+            </label>
+            <input
+              type="date"
+              id="date"
+              class="form-input date-input"
+              required
+            />
+          </div>
+
+          <!-- DESKRIPSI -->
+          <div class="form-group">
+            <label class="form-label" for="description"> Deskripsi </label>
+            <textarea
+              id="description"
+              class="form-textarea"
+              placeholder="Tambahkan catatan (opsional)"
+            ></textarea>
+          </div>
+
+          <!-- DOMPET -->
+          <div class="form-group">
+            <label class="form-label" for="wallet">
+              Dompet <span class="required">*</span>
+            </label>
+            <select id="wallet" class="form-select" required>
+              <option value="">Pilih dompet</option>
+              <option value="utama" selected>Dompet Utama</option>
+              <option value="tabungan">Tabungan</option>
+              <option value="investasi">Investasi</option>
+              <option value="darurat">Dana Darurat</option>
+            </select>
+          </div>
+
+          <!-- INFO BOX -->
+          <div class="info-box">
+            <div class="info-box-title">💡 Tips</div>
+            <div>
+              Catat pemasukan segera setelah menerima untuk tracking yang akurat
+            </div>
+          </div>
+
+          <!-- ACTIONS -->
+          <div class="form-actions">
+            <button type="button" class="btn-cancel" id="cancelBtn">
+              Batal
+            </button>
+            <button type="submit" class="btn-submit">Simpan Pemasukan</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      // Set today's date as default
+      const today = new Date().toISOString().split("T")[0];
+      document.getElementById("date").value = today;
+
+      // === QUICK AMOUNT BUTTONS ===
+      const quickAmountBtns = document.querySelectorAll(".quick-amount-btn");
+      const amountInput = document.getElementById("amount");
+
+      quickAmountBtns.forEach((btn) => {
+        btn.addEventListener("click", function () {
+          const amount = this.getAttribute("data-amount");
+          amountInput.value = amount;
+          amountInput.focus();
+        });
+      });
+
+      // === CATEGORY SELECTION ===
+      const categoryItems = document.querySelectorAll(".category-item");
+      const categoryInput = document.getElementById("category");
+
+      categoryItems.forEach((item) => {
+        item.addEventListener("click", function () {
+          // Remove active from all
+          categoryItems.forEach((i) => i.classList.remove("active"));
+
+          // Add active to clicked
+          this.classList.add("active");
+
+          // Set hidden input value
+          const category = this.getAttribute("data-category");
+          categoryInput.value = category;
+        });
+      });
+
+      // === FORM SUBMIT ===
+      const incomeForm = document.getElementById("incomeForm");
+
+      incomeForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        // Get values
+        const amount = document.getElementById("amount").value;
+        const category = document.getElementById("category").value;
+        const date = document.getElementById("date").value;
+        const description = document.getElementById("description").value;
+        const wallet = document.getElementById("wallet").value;
+
+        // Validation
+        if (!amount || amount <= 0) {
+          alert("Mohon masukkan jumlah yang valid!");
+          return;
+        }
+
+        if (!category) {
+          alert("Mohon pilih kategori!");
+          return;
+        }
+
+        if (!date) {
+          alert("Mohon pilih tanggal!");
+          return;
+        }
+
+        if (!wallet) {
+          alert("Mohon pilih dompet!");
+          return;
+        }
+
+        // Format amount
+        const formattedAmount = "Rp" + parseInt(amount).toLocaleString("id-ID");
+
+        // Success message
+        alert(`✅ Pemasukan berhasil ditambahkan!
+            
+Jumlah: ${formattedAmount}
+Kategori: ${category}
+Tanggal: ${date}
+Dompet: ${wallet}
+${description ? "Catatan: " + description : ""}`);
+
+        // In real app, this would save to database
+        // then redirect to pemasukan page
+        // window.location.href = 'pemasukan.html';
+
+        // Reset form
+        incomeForm.reset();
+        document.getElementById("date").value = today;
+        categoryItems.forEach((i) => i.classList.remove("active"));
+      });
+
+      // === CANCEL BUTTON ===
+      document
+        .getElementById("cancelBtn")
+        .addEventListener("click", function () {
+          if (confirm("Batalkan penambahan pemasukan?")) {
+            window.history.back();
+            // Or: window.location.href = 'pemasukan.html';
+          }
+        });
+
+      // === FORMAT NUMBER INPUT ===
+      amountInput.addEventListener("input", function () {
+        // Remove non-numeric characters
+        this.value = this.value.replace(/[^0-9]/g, "");
+      });
+    </script>
+  </body>
+</html>
+>>>>>>> f9d97fc175d57a231c34f1f3388523d990867ac6

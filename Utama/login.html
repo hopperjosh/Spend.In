@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!doctype html>
 <html lang="id">
   <head>
@@ -363,3 +364,370 @@
     </script>
   </body>
 </html>
+=======
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Masuk - Spend.in</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        /* Background gradasi abu-abu ke hijau - sama seperti halaman utama */
+        background: linear-gradient(
+          180deg,
+          #6b7280 0%,
+          #4b5563 30%,
+          #374151 60%,
+          #2f4f4f 100%
+        );
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      /* === LOGO SECTION === */
+      .logo-section {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .logo-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        margin-bottom: 10px;
+      }
+
+      .logo-icon {
+        font-size: 48px;
+      }
+
+      .logo-text {
+        font-size: 36px;
+        font-weight: bold;
+        color: white;
+      }
+
+      /* === LOGIN CARD === */
+      .login-card {
+        background: white;
+        border-radius: 25px;
+        padding: 40px 30px;
+        width: 100%;
+        max-width: 420px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      }
+
+      .login-header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .login-title {
+        font-size: 28px;
+        font-weight: bold;
+        color: #1a4d2e;
+        margin-bottom: 8px;
+      }
+
+      .login-subtitle {
+        font-size: 14px;
+        color: #666;
+      }
+
+      /* === FORM STYLES === */
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-label {
+        display: block;
+        font-size: 14px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 8px;
+      }
+
+      .input-wrapper {
+        position: relative;
+      }
+
+      .form-input {
+        width: 100%;
+        padding: 14px 16px;
+        font-size: 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 12px;
+        outline: none;
+        transition: all 0.3s;
+      }
+
+      .form-input:focus {
+        border-color: #5dd9a8;
+        box-shadow: 0 0 0 3px rgba(93, 217, 168, 0.1);
+      }
+
+      .form-input::placeholder {
+        color: #aaa;
+      }
+
+      /* Input password dengan ikon mata */
+      .password-input {
+        padding-right: 45px;
+      }
+
+      .eye-icon {
+        position: absolute;
+        right: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 20px;
+        cursor: pointer;
+        user-select: none;
+        transition: opacity 0.2s;
+      }
+
+      .eye-icon:hover {
+        opacity: 0.7;
+      }
+
+      /* === FORGOT PASSWORD LINK === */
+      .forgot-password {
+        text-align: right;
+        margin-top: -10px;
+        margin-bottom: 25px;
+      }
+
+      .forgot-password a {
+        font-size: 13px;
+        color: #5dd9a8;
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .forgot-password a:hover {
+        text-decoration: underline;
+      }
+
+      /* === LOGIN BUTTON === */
+      .login-button {
+        width: 100%;
+        padding: 16px;
+        background: linear-gradient(135deg, #5dd9a8 0%, #4bc294 100%);
+        border: none;
+        border-radius: 12px;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+        box-shadow: 0 4px 15px rgba(93, 217, 168, 0.3);
+      }
+
+      .login-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(93, 217, 168, 0.4);
+      }
+
+      .login-button:active {
+        transform: translateY(0);
+      }
+
+      /* === REGISTER LINK === */
+      .register-link {
+        text-align: center;
+        margin-top: 25px;
+        font-size: 14px;
+        color: #666;
+      }
+
+      .register-link a {
+        color: #5dd9a8;
+        font-weight: 600;
+        text-decoration: none;
+      }
+
+      .register-link a:hover {
+        text-decoration: underline;
+      }
+
+      /* === FOOTER === */
+      .footer {
+        margin-top: 40px;
+        text-align: center;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 13px;
+      }
+
+      /* === RESPONSIVE === */
+      @media (max-width: 480px) {
+        .login-card {
+          padding: 35px 25px;
+        }
+
+        .logo-icon {
+          font-size: 40px;
+        }
+
+        .logo-text {
+          font-size: 30px;
+        }
+
+        .login-title {
+          font-size: 24px;
+        }
+      }
+
+      /* === ANIMATIONS === */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .login-card {
+        animation: fadeInUp 0.6s ease-out;
+      }
+
+      .logo-section {
+        animation: fadeInUp 0.6s ease-out 0.1s both;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- LOGO SECTION -->
+    <div class="logo-section">
+      <a
+        href="../index.html"
+        class="logo-container"
+        style="text-decoration: none; cursor: pointer"
+      >
+        <div class="logo-icon">🐔</div>
+        <div class="logo-text">Spend.in</div>
+      </a>
+    </div>
+
+    <!-- LOGIN CARD -->
+    <div class="login-card">
+      <!-- HEADER -->
+      <div class="login-header">
+        <h1 class="login-title">Masuk ke Akun</h1>
+        <p class="login-subtitle">Kelola keuanganmu dengan mudah</p>
+      </div>
+
+      <!-- FORM -->
+      <form id="loginForm">
+        <!-- EMAIL INPUT -->
+        <div class="form-group">
+          <label class="form-label" for="email">Email</label>
+          <div class="input-wrapper">
+            <input
+              type="email"
+              id="email"
+              class="form-input"
+              placeholder="nama@example.com"
+              required
+            />
+          </div>
+        </div>
+
+        <!-- PASSWORD INPUT -->
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <div class="input-wrapper">
+            <input
+              type="password"
+              id="password"
+              class="form-input password-input"
+              placeholder="Masukkan password"
+              required
+            />
+            <span class="eye-icon" id="togglePassword">👁️</span>
+          </div>
+        </div>
+
+        <!-- FORGOT PASSWORD LINK -->
+        <div class="forgot-password">
+          <a href="#forgot">Lupa password?</a>
+        </div>
+
+        <!-- LOGIN BUTTON -->
+        <button type="submit" class="login-button">Masuk</button>
+
+        <!-- REGISTER LINK -->
+        <div class="register-link">
+          Belum punya akun? <a href="register.html">Daftar</a>
+        </div>
+      </form>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">© 2026 Spend.in</div>
+
+    <script>
+      // === TOGGLE PASSWORD VISIBILITY ===
+      const togglePassword = document.getElementById("togglePassword");
+      const passwordInput = document.getElementById("password");
+
+      togglePassword.addEventListener("click", function () {
+        // Toggle tipe input antara 'password' dan 'text'
+        const type =
+          passwordInput.getAttribute("type") === "password"
+            ? "text"
+            : "password";
+        passwordInput.setAttribute("type", type);
+
+        // Ganti icon mata
+        this.textContent = type === "password" ? "👁️" : "👁️‍🗨️";
+      });
+
+      // === FORM SUBMIT HANDLER ===
+      const loginForm = document.getElementById("loginForm");
+
+      loginForm.addEventListener("submit", function (e) {
+        e.preventDefault(); // Mencegah form submit default
+
+        // Ambil nilai input
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        // Validasi sederhana (dummy)
+        if (email && password) {
+          alert(`Login berhasil!\nEmail: ${email}`);
+          // Di aplikasi nyata, di sini akan ada proses autentikasi ke backend
+          // window.location.href = 'dashboard.html';
+        } else {
+          alert("Mohon isi semua field!");
+        }
+      });
+
+      // === PREVENT FORM SUBMIT ON ENTER (optional) ===
+      // Uncomment jika ingin mencegah submit dengan Enter
+      /*
+        loginForm.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+            }
+        });
+        */
+    </script>
+  </body>
+</html>
+>>>>>>> f9d97fc175d57a231c34f1f3388523d990867ac6

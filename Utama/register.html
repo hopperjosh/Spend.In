@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!doctype html>
 <html lang="id">
   <head>
@@ -606,3 +607,613 @@
     </script>
   </body>
 </html>
+=======
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daftar - Spend.in</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        /* Background gradasi abu-abu ke hijau - sama seperti halaman lain */
+        background: linear-gradient(
+          180deg,
+          #6b7280 0%,
+          #4b5563 30%,
+          #374151 60%,
+          #2f4f4f 100%
+        );
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      /* === LOGO SECTION === */
+      .logo-section {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .logo-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        margin-bottom: 10px;
+      }
+
+      .logo-icon {
+        font-size: 48px;
+      }
+
+      .logo-text {
+        font-size: 36px;
+        font-weight: bold;
+        color: white;
+      }
+
+      /* === REGISTER CARD === */
+      .register-card {
+        background: white;
+        border-radius: 25px;
+        padding: 40px 30px;
+        width: 100%;
+        max-width: 450px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      }
+
+      .register-header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .register-title {
+        font-size: 28px;
+        font-weight: bold;
+        color: #1a4d2e;
+        margin-bottom: 8px;
+      }
+
+      .register-subtitle {
+        font-size: 14px;
+        color: #666;
+      }
+
+      /* === FORM STYLES === */
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-label {
+        display: block;
+        font-size: 14px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 8px;
+      }
+
+      .input-wrapper {
+        position: relative;
+      }
+
+      .form-input {
+        width: 100%;
+        padding: 14px 16px;
+        font-size: 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 12px;
+        outline: none;
+        transition: all 0.3s;
+      }
+
+      .form-input:focus {
+        border-color: #5dd9a8;
+        box-shadow: 0 0 0 3px rgba(93, 217, 168, 0.1);
+      }
+
+      .form-input::placeholder {
+        color: #aaa;
+      }
+
+      /* Input password dengan ikon mata */
+      .password-input {
+        padding-right: 45px;
+      }
+
+      .eye-icon {
+        position: absolute;
+        right: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 20px;
+        cursor: pointer;
+        user-select: none;
+        transition: opacity 0.2s;
+      }
+
+      .eye-icon:hover {
+        opacity: 0.7;
+      }
+
+      /* === CHECKBOX TERMS === */
+      .terms-group {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        margin-bottom: 25px;
+      }
+
+      .terms-checkbox {
+        width: 18px;
+        height: 18px;
+        margin-top: 2px;
+        cursor: pointer;
+        accent-color: #5dd9a8;
+      }
+
+      .terms-label {
+        font-size: 13px;
+        color: #666;
+        line-height: 1.5;
+      }
+
+      .terms-label a {
+        color: #5dd9a8;
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .terms-label a:hover {
+        text-decoration: underline;
+      }
+
+      /* === REGISTER BUTTON === */
+      .register-button {
+        width: 100%;
+        padding: 16px;
+        background: linear-gradient(135deg, #5dd9a8 0%, #4bc294 100%);
+        border: none;
+        border-radius: 12px;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+        box-shadow: 0 4px 15px rgba(93, 217, 168, 0.3);
+      }
+
+      .register-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(93, 217, 168, 0.4);
+      }
+
+      .register-button:active {
+        transform: translateY(0);
+      }
+
+      .register-button:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+
+      /* === DIVIDER === */
+      .divider {
+        display: flex;
+        align-items: center;
+        margin: 25px 0;
+        color: #999;
+        font-size: 13px;
+      }
+
+      .divider::before,
+      .divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background-color: #e0e0e0;
+      }
+
+      .divider::before {
+        margin-right: 15px;
+      }
+
+      .divider::after {
+        margin-left: 15px;
+      }
+
+      /* === SOCIAL BUTTONS === */
+      .social-buttons {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 25px;
+      }
+
+      .social-btn {
+        flex: 1;
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        background-color: white;
+        border-radius: 10px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #333;
+        transition: all 0.3s;
+      }
+
+      .social-btn:hover {
+        border-color: #5dd9a8;
+        background-color: #f8fff8;
+      }
+
+      .social-icon {
+        font-size: 20px;
+      }
+
+      /* === LOGIN LINK === */
+      .login-link {
+        text-align: center;
+        margin-top: 25px;
+        font-size: 14px;
+        color: #666;
+      }
+
+      .login-link a {
+        color: #5dd9a8;
+        font-weight: 600;
+        text-decoration: none;
+      }
+
+      .login-link a:hover {
+        text-decoration: underline;
+      }
+
+      /* === FOOTER === */
+      .footer {
+        margin-top: 40px;
+        text-align: center;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 13px;
+      }
+
+      /* === PASSWORD STRENGTH INDICATOR === */
+      .password-strength {
+        height: 4px;
+        border-radius: 2px;
+        margin-top: 8px;
+        background-color: #e0e0e0;
+        overflow: hidden;
+      }
+
+      .password-strength-bar {
+        height: 100%;
+        width: 0%;
+        transition: all 0.3s;
+      }
+
+      .strength-weak {
+        width: 33%;
+        background-color: #e74c3c;
+      }
+
+      .strength-medium {
+        width: 66%;
+        background-color: #f39c12;
+      }
+
+      .strength-strong {
+        width: 100%;
+        background-color: #5dd9a8;
+      }
+
+      .password-strength-text {
+        font-size: 12px;
+        margin-top: 5px;
+        color: #666;
+      }
+
+      /* === RESPONSIVE === */
+      @media (max-width: 480px) {
+        .register-card {
+          padding: 35px 25px;
+        }
+
+        .logo-icon {
+          font-size: 40px;
+        }
+
+        .logo-text {
+          font-size: 30px;
+        }
+
+        .register-title {
+          font-size: 24px;
+        }
+
+        .social-buttons {
+          flex-direction: column;
+        }
+      }
+
+      /* === ANIMATIONS === */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .register-card {
+        animation: fadeInUp 0.6s ease-out;
+      }
+
+      .logo-section {
+        animation: fadeInUp 0.6s ease-out 0.1s both;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- LOGO SECTION -->
+    <div class="logo-section">
+      <a href="landing.html" style="text-decoration: none">
+        <div class="logo-container">
+          <div class="logo-icon">🐔</div>
+          <div class="logo-text">Spend.in</div>
+        </div>
+      </a>
+    </div>
+
+    <!-- REGISTER CARD -->
+    <div class="register-card">
+      <!-- HEADER -->
+      <div class="register-header">
+        <h1 class="register-title">Buat Akun Baru</h1>
+        <p class="register-subtitle">Mulai kelola keuanganmu dengan mudah</p>
+      </div>
+
+      <!-- FORM -->
+      <form id="registerForm">
+        <!-- NAMA LENGKAP -->
+        <div class="form-group">
+          <label class="form-label" for="fullname">Nama Lengkap</label>
+          <div class="input-wrapper">
+            <input
+              type="text"
+              id="fullname"
+              class="form-input"
+              placeholder="Masukkan nama lengkap"
+              required
+            />
+          </div>
+        </div>
+
+        <!-- EMAIL INPUT -->
+        <div class="form-group">
+          <label class="form-label" for="email">Email</label>
+          <div class="input-wrapper">
+            <input
+              type="email"
+              id="email"
+              class="form-input"
+              placeholder="nama@example.com"
+              required
+            />
+          </div>
+        </div>
+
+        <!-- PASSWORD INPUT -->
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <div class="input-wrapper">
+            <input
+              type="password"
+              id="password"
+              class="form-input password-input"
+              placeholder="Minimal 8 karakter"
+              required
+            />
+            <span class="eye-icon" id="togglePassword">👁️</span>
+          </div>
+          <div class="password-strength">
+            <div class="password-strength-bar" id="strengthBar"></div>
+          </div>
+          <div class="password-strength-text" id="strengthText"></div>
+        </div>
+
+        <!-- CONFIRM PASSWORD INPUT -->
+        <div class="form-group">
+          <label class="form-label" for="confirmPassword"
+            >Konfirmasi Password</label
+          >
+          <div class="input-wrapper">
+            <input
+              type="password"
+              id="confirmPassword"
+              class="form-input password-input"
+              placeholder="Masukkan password lagi"
+              required
+            />
+            <span class="eye-icon" id="toggleConfirmPassword">👁️</span>
+          </div>
+        </div>
+
+        <!-- TERMS & CONDITIONS -->
+        <div class="terms-group">
+          <input type="checkbox" id="terms" class="terms-checkbox" required />
+          <label class="terms-label" for="terms">
+            Saya setuju dengan <a href="#terms">Syarat & Ketentuan</a> dan
+            <a href="#privacy">Kebijakan Privasi</a>
+          </label>
+        </div>
+
+        <!-- REGISTER BUTTON -->
+        <button type="submit" class="register-button" id="registerBtn">
+          Daftar Sekarang
+        </button>
+
+        <!-- DIVIDER -->
+        <div class="divider">atau daftar dengan</div>
+
+        <!-- SOCIAL BUTTONS -->
+        <div class="social-buttons">
+          <button type="button" class="social-btn" id="googleBtn">
+            <span class="social-icon">🔍</span>
+            <span>Google</span>
+          </button>
+          <button type="button" class="social-btn" id="facebookBtn">
+            <span class="social-icon">📘</span>
+            <span>Facebook</span>
+          </button>
+        </div>
+
+        <!-- LOGIN LINK -->
+        <div class="login-link">
+          Sudah punya akun? <a href="login.html">Masuk</a>
+        </div>
+      </form>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">© 2026 Spend.in</div>
+
+    <script>
+      // === PASSWORD VISIBILITY TOGGLE ===
+      const togglePassword = document.getElementById("togglePassword");
+      const passwordInput = document.getElementById("password");
+      const toggleConfirmPassword = document.getElementById(
+        "toggleConfirmPassword",
+      );
+      const confirmPasswordInput = document.getElementById("confirmPassword");
+
+      // Toggle password
+      togglePassword.addEventListener("click", function () {
+        const type =
+          passwordInput.getAttribute("type") === "password"
+            ? "text"
+            : "password";
+        passwordInput.setAttribute("type", type);
+        this.textContent = type === "password" ? "👁️" : "👁️‍🗨️";
+      });
+
+      // Toggle confirm password
+      toggleConfirmPassword.addEventListener("click", function () {
+        const type =
+          confirmPasswordInput.getAttribute("type") === "password"
+            ? "text"
+            : "password";
+        confirmPasswordInput.setAttribute("type", type);
+        this.textContent = type === "password" ? "👁️" : "👁️‍🗨️";
+      });
+
+      // === PASSWORD STRENGTH CHECKER ===
+      const strengthBar = document.getElementById("strengthBar");
+      const strengthText = document.getElementById("strengthText");
+
+      passwordInput.addEventListener("input", function () {
+        const password = this.value;
+        let strength = 0;
+
+        // Check password strength
+        if (password.length >= 8) strength++;
+        if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength++;
+        if (password.match(/[0-9]/)) strength++;
+        if (password.match(/[^a-zA-Z0-9]/)) strength++;
+
+        // Update UI
+        strengthBar.className = "password-strength-bar";
+
+        if (password.length === 0) {
+          strengthText.textContent = "";
+        } else if (strength <= 1) {
+          strengthBar.classList.add("strength-weak");
+          strengthText.textContent = "Password lemah";
+          strengthText.style.color = "#e74c3c";
+        } else if (strength <= 2) {
+          strengthBar.classList.add("strength-medium");
+          strengthText.textContent = "Password sedang";
+          strengthText.style.color = "#f39c12";
+        } else {
+          strengthBar.classList.add("strength-strong");
+          strengthText.textContent = "Password kuat";
+          strengthText.style.color = "#5dd9a8";
+        }
+      });
+
+      // === FORM VALIDATION & SUBMIT ===
+      const registerForm = document.getElementById("registerForm");
+
+      registerForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        // Get values
+        const fullname = document.getElementById("fullname").value;
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const confirmPassword =
+          document.getElementById("confirmPassword").value;
+        const terms = document.getElementById("terms").checked;
+
+        // Validation
+        if (!fullname || !email || !password || !confirmPassword) {
+          alert("Mohon isi semua field!");
+          return;
+        }
+
+        if (password.length < 8) {
+          alert("Password minimal 8 karakter!");
+          return;
+        }
+
+        if (password !== confirmPassword) {
+          alert("Password dan konfirmasi password tidak sama!");
+          return;
+        }
+
+        if (!terms) {
+          alert("Anda harus menyetujui Syarat & Ketentuan!");
+          return;
+        }
+
+        // Success
+        alert(`Pendaftaran berhasil!\nNama: ${fullname}\nEmail: ${email}`);
+        // Di aplikasi nyata, akan redirect ke dashboard atau halaman verifikasi email
+        // window.location.href = 'dashboard.html';
+      });
+
+      // === SOCIAL LOGIN BUTTONS ===
+      document
+        .getElementById("googleBtn")
+        .addEventListener("click", function () {
+          alert("Fitur login dengan Google akan segera hadir!");
+        });
+
+      document
+        .getElementById("facebookBtn")
+        .addEventListener("click", function () {
+          alert("Fitur login dengan Facebook akan segera hadir!");
+        });
+    </script>
+  </body>
+</html>
+>>>>>>> f9d97fc175d57a231c34f1f3388523d990867ac6

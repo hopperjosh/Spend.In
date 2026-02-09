@@ -421,8 +421,20 @@
           <span>Dompet utama</span>
         </div>
         <div class="balance-buttons">
-          <button class="pill-button pill-income">Pemasukan Bulan Ini ➤</button>
-          <button class="pill-button pill-expense">
+          <button
+            class="pill-button pill-income"
+            onclick="
+              window.location.href = 'Border atas/Halaman Pemasukan.html'
+            "
+          >
+            Pemasukan Bulan Ini ➤
+          </button>
+          <button
+            class="pill-button pill-expense"
+            onclick="
+              window.location.href = 'Border atas/Halaman Pengeluaran.html'
+            "
+          >
             Pengeluaran Bulan Ini ➤
           </button>
         </div>
@@ -579,32 +591,12 @@
             balanceAmount.textContent = "Rp7.500.000";
           }
         });
-
-      // Event untuk tombol-tombol (bisa dikembangkan lebih lanjut)
-      document
-        .querySelector(".add-transaction-btn")
-        .addEventListener("click", function () {
-          alert("Anda akan masuk ke halaman pengeluaran!");
-        });
-
-      document
-        .querySelector(".add-balance-btn")
-        .addEventListener("click", function () {
-          alert("Anda akan masuk ke halaman penginputan saldo!");
-        });
-
+      // Detail transaksi button
       document
         .querySelector(".detail-btn")
         .addEventListener("click", function () {
           alert("Menampilkan detail transaksi...");
         });
-
-      // Event untuk pill buttons
-      document.querySelectorAll(".pill-button").forEach((button) => {
-        button.addEventListener("click", function () {
-          alert("Fitur " + this.textContent.trim() + " akan segera hadir!");
-        });
-      });
     </script>
   </body>
 </html>
