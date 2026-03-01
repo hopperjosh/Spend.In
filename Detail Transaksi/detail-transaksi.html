@@ -13,7 +13,6 @@
 
       body {
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        /* Background gradasi abu-abu ke hijau */
         background: linear-gradient(
           180deg,
           #6b7280 0%,
@@ -25,7 +24,6 @@
         padding-bottom: 50px;
       }
 
-      /* === HEADER === */
       header {
         background-color: rgba(255, 255, 255, 0.95);
         padding: 15px 20px;
@@ -47,35 +45,29 @@
         align-items: center;
         gap: 5px;
       }
-
       .back-button:hover {
         opacity: 0.7;
       }
-
       .header-title {
         font-size: 20px;
         font-weight: bold;
         color: #333;
       }
-
       .header-menu {
         font-size: 24px;
         cursor: pointer;
         color: #333;
       }
-
       .header-menu:hover {
         opacity: 0.7;
       }
 
-      /* === MAIN CONTAINER === */
       .container {
         max-width: 600px;
         margin: 0 auto;
         padding: 20px;
       }
 
-      /* === AMOUNT CARD === */
       .amount-card {
         border-radius: 20px;
         padding: 40px 30px;
@@ -83,12 +75,11 @@
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         color: white;
         text-align: center;
+        animation: fadeInUp 0.4s ease-out;
       }
-
       .amount-card.income {
         background: linear-gradient(135deg, #5dade2 0%, #4a9fd8 100%);
       }
-
       .amount-card.expense {
         background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
       }
@@ -97,7 +88,6 @@
         font-size: 64px;
         margin-bottom: 20px;
       }
-
       .transaction-type-label {
         font-size: 14px;
         opacity: 0.9;
@@ -105,27 +95,24 @@
         text-transform: uppercase;
         letter-spacing: 1px;
       }
-
       .transaction-amount-large {
         font-size: 48px;
         font-weight: bold;
         margin-bottom: 15px;
       }
-
       .transaction-name-large {
         font-size: 18px;
         opacity: 0.95;
       }
 
-      /* === DETAIL CARD === */
       .detail-card {
         background: white;
         border-radius: 20px;
         padding: 25px;
         margin-bottom: 20px;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        animation: fadeInUp 0.4s ease-out 0.1s both;
       }
-
       .detail-section-title {
         font-size: 16px;
         font-weight: bold;
@@ -139,7 +126,6 @@
         padding: 15px 0;
         border-bottom: 1px solid #f0f0f0;
       }
-
       .detail-item:last-child {
         border-bottom: none;
       }
@@ -152,14 +138,11 @@
         align-items: center;
         justify-content: center;
         font-size: 22px;
-        background: #f8f9fa;
         margin-right: 15px;
       }
-
       .detail-icon.income {
         background: rgba(93, 173, 226, 0.1);
       }
-
       .detail-icon.expense {
         background: rgba(231, 76, 60, 0.1);
       }
@@ -167,28 +150,25 @@
       .detail-content {
         flex: 1;
       }
-
       .detail-label {
         font-size: 13px;
         color: #999;
         margin-bottom: 4px;
       }
-
       .detail-value {
         font-size: 15px;
         font-weight: 600;
         color: #333;
       }
 
-      /* === NOTES SECTION === */
       .notes-card {
         background: white;
         border-radius: 20px;
         padding: 25px;
         margin-bottom: 20px;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        animation: fadeInUp 0.4s ease-out 0.2s both;
       }
-
       .notes-title {
         font-size: 16px;
         font-weight: bold;
@@ -198,7 +178,6 @@
         align-items: center;
         gap: 8px;
       }
-
       .notes-content {
         font-size: 14px;
         color: #666;
@@ -207,17 +186,27 @@
         padding: 15px;
         border-radius: 12px;
       }
-
       .notes-empty {
         font-size: 14px;
         color: #999;
         font-style: italic;
       }
 
-      /* === ACTION BUTTONS === */
+      .info-box {
+        background: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-size: 13px;
+        color: #856404;
+        animation: fadeInUp 0.4s ease-out 0.25s both;
+      }
+
       .action-buttons {
         display: flex;
         gap: 12px;
+        animation: fadeInUp 0.4s ease-out 0.3s both;
       }
 
       .btn-edit {
@@ -236,7 +225,6 @@
         justify-content: center;
         gap: 8px;
       }
-
       .btn-edit:hover {
         background: #5dd9a8;
         color: white;
@@ -259,58 +247,90 @@
         justify-content: center;
         gap: 8px;
       }
-
       .btn-delete:hover {
         transform: translateY(-2px);
         box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
       }
-
       .btn-delete:active {
         transform: translateY(0);
       }
-
-      /* === INFO BOX === */
-      .info-box {
-        background: #fff3cd;
-        border-left: 4px solid #ffc107;
-        padding: 15px;
-        border-radius: 8px;
-        margin-bottom: 20px;
-        font-size: 13px;
-        color: #856404;
+      .btn-delete:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
       }
 
-      /* === RESPONSIVE === */
+      .loading-placeholder {
+        background: linear-gradient(
+          90deg,
+          #f0f0f0 25%,
+          #e0e0e0 50%,
+          #f0f0f0 75%
+        );
+        background-size: 200% 100%;
+        animation: shimmer 1.5s infinite;
+        border-radius: 8px;
+      }
+      @keyframes shimmer {
+        0% {
+          background-position: 200% 0;
+        }
+        100% {
+          background-position: -200% 0;
+        }
+      }
+
+      .error-card {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        text-align: center;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+      .error-icon {
+        font-size: 60px;
+        margin-bottom: 15px;
+      }
+      .error-text {
+        font-size: 16px;
+        color: #666;
+        margin-bottom: 20px;
+      }
+      .btn-back {
+        padding: 12px 30px;
+        background: #5dd9a8;
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
       @media (max-width: 480px) {
         .amount-card {
           padding: 35px 25px;
         }
-
         .transaction-amount-large {
           font-size: 38px;
         }
-
         .transaction-icon-large {
           font-size: 52px;
         }
       }
-
       @media (min-width: 768px) {
         .container {
           padding: 40px 20px;
         }
-
         .amount-card {
           padding: 50px 40px;
         }
-
         .detail-card,
         .notes-card {
           padding: 30px;
         }
       }
 
-      /* === ANIMATIONS === */
       @keyframes fadeInUp {
         from {
           opacity: 0;
@@ -321,204 +341,263 @@
           transform: translateY(0);
         }
       }
-
-      .amount-card,
-      .detail-card,
-      .notes-card,
-      .action-buttons {
-        animation: fadeInUp 0.5s ease-out;
-      }
-
-      .detail-card {
-        animation-delay: 0.1s;
-      }
-
-      .notes-card {
-        animation-delay: 0.2s;
-      }
-
-      .action-buttons {
-        animation-delay: 0.3s;
-      }
     </style>
   </head>
   <body>
-    <!-- HEADER -->
     <header>
       <a href="javascript:history.back()" class="back-button">←</a>
       <div class="header-title">Detail Transaksi</div>
-      <div class="header-menu">⋮</div>
+      <div class="header-menu" id="headerMenu">⋮</div>
     </header>
 
-    <!-- MAIN CONTAINER -->
-    <div class="container">
-      <!-- AMOUNT CARD -->
-      <div class="amount-card" id="amountCard">
-        <div class="transaction-icon-large" id="transactionIcon">💰</div>
-        <div class="transaction-type-label" id="transactionType">PEMASUKAN</div>
-        <div class="transaction-amount-large" id="transactionAmount">
-          +Rp5.000.000
-        </div>
-        <div class="transaction-name-large" id="transactionName">
-          Gaji Bulanan
-        </div>
-      </div>
-
-      <!-- DETAIL CARD -->
+    <div class="container" id="mainContainer">
       <div class="detail-card">
-        <div class="detail-section-title">Informasi Transaksi</div>
-
-        <div class="detail-item">
-          <div class="detail-icon" id="categoryIcon">📂</div>
-          <div class="detail-content">
-            <div class="detail-label">Kategori</div>
-            <div class="detail-value" id="category">Gaji</div>
-          </div>
-        </div>
-
-        <div class="detail-item">
-          <div class="detail-icon" id="dateIcon">📅</div>
-          <div class="detail-content">
-            <div class="detail-label">Tanggal & Waktu</div>
-            <div class="detail-value" id="dateTime">20 Januari 2026, 14:30</div>
-          </div>
-        </div>
-
-        <div class="detail-item">
-          <div class="detail-icon" id="walletIcon">💳</div>
-          <div class="detail-content">
-            <div class="detail-label">Dompet</div>
-            <div class="detail-value" id="wallet">Dompet Utama</div>
-          </div>
-        </div>
-
-        <div class="detail-item">
-          <div class="detail-icon" id="statusIcon">✅</div>
-          <div class="detail-content">
-            <div class="detail-label">Status</div>
-            <div class="detail-value" id="status">Berhasil</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- NOTES CARD -->
-      <div class="notes-card">
-        <div class="notes-title">📝 Catatan</div>
-        <div class="notes-content" id="notes">
-          Gaji bulan Januari 2026. Transfer dari kantor ke rekening BCA.
-        </div>
-      </div>
-
-      <!-- INFO BOX -->
-      <div class="info-box">
-        💡 Transaksi ini telah tercatat dalam laporan keuangan Anda
-      </div>
-
-      <!-- ACTION BUTTONS -->
-      <div class="action-buttons">
-        <button class="btn-edit" id="editBtn">✏️ Edit</button>
-        <button class="btn-delete" id="deleteBtn">🗑️ Hapus</button>
+        <div class="loading-placeholder" style="height: 200px"></div>
       </div>
     </div>
 
-    <script>
-      // === PARSE URL PARAMETERS ===
-      const urlParams = new URLSearchParams(window.location.search);
-      const type = urlParams.get("type") || "income"; // 'income' or 'expense'
+    <script type="module">
+      import { transactionAPI } from "../js/api.js";
 
-      // === DUMMY DATA ===
-      const transactionData = {
-        income: {
-          icon: "💰",
-          type: "PEMASUKAN",
-          amount: "+Rp5.000.000",
-          name: "Gaji Bulanan",
-          category: "Gaji",
-          date: "20 Januari 2026, 14:30",
-          wallet: "Dompet Utama",
-          status: "Berhasil",
-          notes:
-            "Gaji bulan Januari 2026. Transfer dari kantor ke rekening BCA.",
-        },
-        expense: {
-          icon: "🏠",
-          type: "PENGELUARAN",
-          amount: "-Rp3.500.000",
-          name: "Bayar Sewa Kost",
-          category: "Tempat Tinggal",
-          date: "22 Januari 2026, 10:15",
-          wallet: "Dompet Utama",
-          status: "Berhasil",
-          notes:
-            "Pembayaran sewa kost bulan Februari 2026. Transfer ke Bu Ani.",
-        },
+      // =============================================
+      // MAPPING category_id → { nama, emoji }
+      // ⚠️ Sesuaikan ID ini dengan tabel categories
+      // di database backend kamu!
+      // =============================================
+      const CATEGORY_MAP = {
+        // PEMASUKAN
+        1: { nama: "Gaji", emoji: "💰" },
+        2: { nama: "Freelance", emoji: "💼" },
+        3: { nama: "Investasi", emoji: "📈" },
+        4: { nama: "Bonus", emoji: "🎁" },
+        5: { nama: "Penjualan", emoji: "🛍️" },
+        6: { nama: "Hadiah", emoji: "🎉" },
+        7: { nama: "Refund", emoji: "↩️" },
+        8: { nama: "Lainnya", emoji: "📦" },
+        // PENGELUARAN
+        9: { nama: "Makanan", emoji: "🍔" },
+        10: { nama: "Transportasi", emoji: "🚗" },
+        11: { nama: "Belanja", emoji: "🛒" },
+        12: { nama: "Hiburan", emoji: "🎮" },
+        13: { nama: "Kesehatan", emoji: "💊" },
+        14: { nama: "Pendidikan", emoji: "📚" },
+        15: { nama: "Tagihan", emoji: "📱" },
+        16: { nama: "Tempat Tinggal", emoji: "🏠" },
       };
 
-      // === APPLY DATA BASED ON TYPE ===
-      const data = transactionData[type];
+      // =============================================
+      // MAPPING wallet_id → nama tampilan
+      // ⚠️ Sesuaikan dengan tabel wallets di database!
+      // =============================================
+      const WALLET_MAP = {
+        1: "Dompet Utama",
+        2: "Tabungan",
+        3: "Investasi",
+        4: "Dana Darurat",
+      };
 
-      // Update amount card
-      const amountCard = document.getElementById("amountCard");
-      amountCard.classList.add(type);
-
-      document.getElementById("transactionIcon").textContent = data.icon;
-      document.getElementById("transactionType").textContent = data.type;
-      document.getElementById("transactionAmount").textContent = data.amount;
-      document.getElementById("transactionName").textContent = data.name;
-
-      // Update detail icons
-      document.getElementById("categoryIcon").classList.add(type);
-      document.getElementById("dateIcon").classList.add(type);
-      document.getElementById("walletIcon").classList.add(type);
-      document.getElementById("statusIcon").classList.add(type);
-
-      // Update detail values
-      document.getElementById("category").textContent = data.category;
-      document.getElementById("dateTime").textContent = data.date;
-      document.getElementById("wallet").textContent = data.wallet;
-      document.getElementById("status").textContent = data.status;
-
-      // Update notes
-      const notesElement = document.getElementById("notes");
-      if (data.notes) {
-        notesElement.textContent = data.notes;
-      } else {
-        notesElement.innerHTML =
-          '<span class="notes-empty">Tidak ada catatan</span>';
+      // Resolve kategori — support category_id (int) ATAU category (string)
+      function getCategoryInfo(trx) {
+        if (trx.category_id && CATEGORY_MAP[trx.category_id]) {
+          return CATEGORY_MAP[trx.category_id];
+        }
+        // Fallback: kalau API ternyata tetap kirim nama string
+        if (trx.category) {
+          const key = trx.category.toLowerCase().trim();
+          const emojiMap = {
+            gaji: "💰",
+            freelance: "💼",
+            investasi: "📈",
+            bonus: "🎁",
+            penjualan: "🛍️",
+            hadiah: "🎉",
+            refund: "↩️",
+            makan: "🍔",
+            transportasi: "🚗",
+            belanja: "🛒",
+            tagihan: "📱",
+            kesehatan: "💊",
+            hiburan: "🎮",
+            pendidikan: "📚",
+            tempat_tinggal: "🏠",
+            pakaian: "👕",
+            lainnya: "📦",
+          };
+          const nama = key
+            .replace(/_/g, " ")
+            .replace(/\b\w/g, (c) => c.toUpperCase());
+          return { nama, emoji: emojiMap[key] || "📦" };
+        }
+        return { nama: "Lainnya", emoji: "📦" };
       }
 
-      // === EVENT LISTENERS ===
-      document.getElementById("editBtn").addEventListener("click", function () {
-        if (type === "income") {
-          // navigate to add/edit income page
-          window.location.href = "../Input Saldo/tambah-pemasukan.html";
-        } else {
-          // navigate to add/edit expense page
-          window.location.href = "../Input Saldo/tambah-pengeluaran.html";
+      // Resolve wallet — support wallet_id (int) ATAU wallet (string)
+      function getWalletName(trx) {
+        if (trx.wallet_id && WALLET_MAP[trx.wallet_id])
+          return WALLET_MAP[trx.wallet_id];
+        if (trx.wallet)
+          return trx.wallet
+            .replace(/_/g, " ")
+            .replace(/\b\w/g, (c) => c.toUpperCase());
+        return "Dompet Utama";
+      }
+
+      function formatRupiah(num) {
+        return "Rp" + Number(num).toLocaleString("id-ID");
+      }
+
+      function formatDate(dateStr) {
+        if (!dateStr) return "-";
+        return new Date(dateStr).toLocaleDateString("id-ID", {
+          weekday: "long",
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        });
+      }
+
+      function renderPage(trx) {
+        const isIncome = trx.type === "income" || trx.type === "pemasukan";
+        const typeClass = isIncome ? "income" : "expense";
+        const typeLabel = isIncome ? "PEMASUKAN" : "PENGELUARAN";
+        const prefix = isIncome ? "+" : "-";
+        const { nama: catNama, emoji: catEmoji } = getCategoryInfo(trx);
+        const walletName = getWalletName(trx);
+        const deskripsi = trx.description || catNama;
+
+        document.getElementById("mainContainer").innerHTML = `
+          <div class="amount-card ${typeClass}">
+            <div class="transaction-icon-large">${catEmoji}</div>
+            <div class="transaction-type-label">${typeLabel}</div>
+            <div class="transaction-amount-large">${prefix}${formatRupiah(trx.amount)}</div>
+            <div class="transaction-name-large">${deskripsi}</div>
+          </div>
+
+          <div class="detail-card">
+            <div class="detail-section-title">Informasi Transaksi</div>
+
+            <div class="detail-item">
+              <div class="detail-icon ${typeClass}">${catEmoji}</div>
+              <div class="detail-content">
+                <div class="detail-label">Kategori</div>
+                <div class="detail-value">${catNama}</div>
+              </div>
+            </div>
+
+            <div class="detail-item">
+              <div class="detail-icon ${typeClass}">📅</div>
+              <div class="detail-content">
+                <div class="detail-label">Tanggal</div>
+                <div class="detail-value">${formatDate(trx.transaction_date)}</div>
+              </div>
+            </div>
+
+            <div class="detail-item">
+              <div class="detail-icon ${typeClass}">💳</div>
+              <div class="detail-content">
+                <div class="detail-label">Dompet</div>
+                <div class="detail-value">${walletName}</div>
+              </div>
+            </div>
+
+            <div class="detail-item">
+              <div class="detail-icon ${typeClass}">✅</div>
+              <div class="detail-content">
+                <div class="detail-label">Status</div>
+                <div class="detail-value">Berhasil</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="notes-card">
+            <div class="notes-title">📝 Catatan</div>
+            <div class="notes-content">
+              ${
+                trx.description
+                  ? trx.description
+                  : '<span class="notes-empty">Tidak ada catatan</span>'
+              }
+            </div>
+          </div>
+
+          <div class="info-box">
+            💡 Transaksi ini telah tercatat dalam laporan keuangan Anda
+          </div>
+
+          <div class="action-buttons">
+            <button class="btn-edit" id="editBtn">✏️ Edit</button>
+            <button class="btn-delete" id="deleteBtn">🗑️ Hapus</button>
+          </div>
+        `;
+
+        // Edit — kirim id ke form untuk prefill nanti
+        document.getElementById("editBtn").addEventListener("click", () => {
+          const path = isIncome
+            ? `../Input Transaksi/tambah-pemasukan.html?id=${trx.id}`
+            : `../Input Transaksi/tambah-pengeluaran.html?id=${trx.id}`;
+          window.location.href = path;
+        });
+
+        // Delete
+        document
+          .getElementById("deleteBtn")
+          .addEventListener("click", async () => {
+            const ok = confirm(
+              `Hapus ${typeLabel.toLowerCase()} "${deskripsi}"?\n\nJumlah: ${prefix}${formatRupiah(trx.amount)}\n\nTindakan ini tidak dapat dibatalkan.`,
+            );
+            if (!ok) return;
+
+            const btn = document.getElementById("deleteBtn");
+            btn.disabled = true;
+            btn.textContent = "Menghapus...";
+
+            try {
+              await transactionAPI.delete(trx.id);
+              alert("✅ Transaksi berhasil dihapus!");
+              window.location.href = "../index.html";
+            } catch (err) {
+              alert("❌ Gagal menghapus: " + err.message);
+              btn.disabled = false;
+              btn.innerHTML = "🗑️ Hapus";
+            }
+          });
+      }
+
+      function renderError(msg) {
+        document.getElementById("mainContainer").innerHTML = `
+          <div class="error-card">
+            <div class="error-icon">😕</div>
+            <div class="error-text">${msg}</div>
+            <button class="btn-back" onclick="history.back()">← Kembali</button>
+          </div>
+        `;
+      }
+
+      async function loadTransaction() {
+        const id = new URLSearchParams(window.location.search).get("id");
+        if (!id) {
+          renderError("ID transaksi tidak ditemukan di URL.");
+          return;
         }
+
+        try {
+          const trx = await transactionAPI.getById(id);
+          if (!trx) {
+            renderError("Transaksi tidak ditemukan.");
+            return;
+          }
+          renderPage(trx);
+        } catch (err) {
+          console.error(err);
+          renderError("Gagal memuat transaksi. Silakan coba lagi.");
+        }
+      }
+
+      document.getElementById("headerMenu").addEventListener("click", () => {
+        alert("Menu:\n- Share\n- Export\n- Duplicate");
       });
 
-      document
-        .getElementById("deleteBtn")
-        .addEventListener("click", function () {
-          const confirmDelete = confirm(
-            `Apakah Anda yakin ingin menghapus ${data.type.toLowerCase()} "${data.name}"?\n\nJumlah: ${data.amount}\n\nTindakan ini tidak dapat dibatalkan.`,
-          );
-
-          if (confirmDelete) {
-            alert("✅ Transaksi berhasil dihapus!");
-            // In real app, send delete request to backend
-            // then redirect back
-            window.history.back();
-          }
-        });
-
-      // Menu button (three dots)
-      document
-        .querySelector(".header-menu")
-        .addEventListener("click", function () {
-          alert("Menu options:\n- Share\n- Export\n- Duplicate");
-        });
+      loadTransaction();
     </script>
   </body>
 </html>

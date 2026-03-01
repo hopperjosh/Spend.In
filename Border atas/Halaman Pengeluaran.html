@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pengeluaran Bulan Ini - Spend.in</title>
+    <title>Laporan Pengeluaran - Spend.in</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <style>
       * {
@@ -14,7 +14,6 @@
 
       body {
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        /* Background gradasi abu-abu ke hijau */
         background: linear-gradient(
           180deg,
           #6b7280 0%,
@@ -26,7 +25,6 @@
         padding-bottom: 100px;
       }
 
-      /* === HEADER === */
       header {
         background-color: rgba(255, 255, 255, 0.95);
         padding: 15px 20px;
@@ -48,22 +46,18 @@
         align-items: center;
         gap: 5px;
       }
-
       .back-button:hover {
         opacity: 0.7;
       }
-
       .header-title {
         font-size: 20px;
         font-weight: bold;
         color: #333;
       }
-
       .header-spacer {
         width: 30px;
       }
 
-      /* === MAIN CONTAINER === */
       .container {
         max-width: 1400px;
         margin: 0 auto;
@@ -79,19 +73,16 @@
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         color: white;
       }
-
       .summary-label {
         font-size: 14px;
         opacity: 0.9;
         margin-bottom: 10px;
       }
-
       .summary-amount {
         font-size: 42px;
         font-weight: bold;
         margin-bottom: 15px;
       }
-
       .summary-period {
         font-size: 13px;
         opacity: 0.8;
@@ -99,65 +90,56 @@
         align-items: center;
         gap: 5px;
       }
-
       .summary-stats {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 15px;
         margin-top: 20px;
       }
-
       .stat-item {
         background: rgba(255, 255, 255, 0.15);
         padding: 15px;
         border-radius: 12px;
         backdrop-filter: blur(10px);
       }
-
       .stat-label {
         font-size: 12px;
         opacity: 0.9;
         margin-bottom: 5px;
       }
-
       .stat-value {
         font-size: 20px;
         font-weight: bold;
       }
 
-      /* === CHART SECTIONS === */
+      /* === CHARTS GRID === */
       .charts-grid {
         display: grid;
         grid-template-columns: 1fr;
         gap: 25px;
       }
-
       .chart-card {
         background: white;
         border-radius: 20px;
         padding: 25px;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
       }
-
       .chart-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 20px;
       }
-
       .chart-title {
         font-size: 18px;
         font-weight: bold;
         color: #333;
       }
-
       .chart-subtitle {
         font-size: 12px;
         color: #999;
         margin-top: 2px;
       }
-
       .chart-period {
         font-size: 13px;
         color: #666;
@@ -165,16 +147,13 @@
         background: #f0f0f0;
         border-radius: 20px;
       }
-
       .chart-container {
         position: relative;
         height: 300px;
       }
-
       .chart-container.large {
         height: 400px;
       }
-
       .chart-container.medium {
         height: 350px;
       }
@@ -186,7 +165,6 @@
         gap: 15px;
         margin-top: 20px;
       }
-
       .stat-card {
         background: #fff8f8;
         padding: 20px;
@@ -194,22 +172,41 @@
         text-align: center;
         border: 2px solid #ffe8e8;
       }
-
       .stat-card-icon {
         font-size: 32px;
         margin-bottom: 10px;
       }
-
       .stat-card-label {
         font-size: 12px;
         color: #666;
         margin-bottom: 5px;
       }
-
       .stat-card-value {
         font-size: 24px;
         font-weight: bold;
         color: #e74c3c;
+      }
+
+      /* === LOADING === */
+      .loading-placeholder {
+        background: linear-gradient(
+          90deg,
+          #f0f0f0 25%,
+          #e0e0e0 50%,
+          #f0f0f0 75%
+        );
+        background-size: 200% 100%;
+        animation: shimmer 1.5s infinite;
+        border-radius: 8px;
+        height: 24px;
+      }
+      @keyframes shimmer {
+        0% {
+          background-position: 200% 0;
+        }
+        100% {
+          background-position: -200% 0;
+        }
       }
 
       /* === RESPONSIVE === */
@@ -217,37 +214,29 @@
         .container {
           padding: 30px;
         }
-
         .summary-amount {
           font-size: 48px;
         }
-
         .summary-stats {
           grid-template-columns: repeat(4, 1fr);
         }
-
         .charts-grid {
           grid-template-columns: repeat(2, 1fr);
         }
-
         .chart-card.full-width {
           grid-column: 1 / -1;
         }
-
         .stats-grid {
           grid-template-columns: repeat(4, 1fr);
         }
       }
-
       @media (min-width: 1200px) {
         .container {
           padding: 40px;
         }
-
         .chart-container {
           height: 350px;
         }
-
         .chart-container.large {
           height: 450px;
         }
@@ -255,51 +244,48 @@
     </style>
   </head>
   <body>
-    <!-- HEADER -->
     <header>
       <a href="../index.html" class="back-button">←</a>
-      <div class="header-title">Pengeluaran Bulan Ini</div>
+      <div class="header-title">Laporan Pengeluaran</div>
       <div class="header-spacer"></div>
     </header>
 
-    <!-- MAIN CONTAINER -->
     <div class="container">
       <!-- SUMMARY CARD -->
       <div class="summary-card">
         <div class="summary-label">Total Pengeluaran</div>
-        <div class="summary-amount">Rp12.350.000</div>
-        <div class="summary-period">📅 Januari 2026</div>
-
+        <div class="summary-amount" id="totalExpense">Memuat...</div>
+        <div class="summary-period" id="summaryPeriod">📅 Memuat...</div>
         <div class="summary-stats">
           <div class="stat-item">
             <div class="stat-label">Transaksi</div>
-            <div class="stat-value">24</div>
+            <div class="stat-value" id="statCount">-</div>
           </div>
           <div class="stat-item">
             <div class="stat-label">Rata-rata</div>
-            <div class="stat-value">514K</div>
+            <div class="stat-value" id="statAverage">-</div>
           </div>
           <div class="stat-item">
             <div class="stat-label">Terbesar</div>
-            <div class="stat-value">3.5M</div>
+            <div class="stat-value" id="statMax">-</div>
           </div>
           <div class="stat-item">
             <div class="stat-label">Terkecil</div>
-            <div class="stat-value">15K</div>
+            <div class="stat-value" id="statMin">-</div>
           </div>
         </div>
       </div>
 
       <!-- CHARTS GRID -->
       <div class="charts-grid">
-        <!-- TREND LINE CHART - FULL WIDTH -->
+        <!-- TREND LINE CHART -->
         <div class="chart-card full-width">
           <div class="chart-header">
             <div>
               <div class="chart-title">Tren Pengeluaran</div>
-              <div class="chart-subtitle">Perkembangan bulan ini</div>
+              <div class="chart-subtitle">Perkembangan kumulatif bulan ini</div>
             </div>
-            <div class="chart-period">Jan 2026</div>
+            <div class="chart-period" id="chartPeriodLabel">-</div>
           </div>
           <div class="chart-container large">
             <canvas id="trendChart"></canvas>
@@ -319,7 +305,7 @@
           </div>
         </div>
 
-        <!-- BAR CHART - PERBANDINGAN MINGGUAN -->
+        <!-- BAR CHART - MINGGUAN -->
         <div class="chart-card">
           <div class="chart-header">
             <div>
@@ -332,269 +318,370 @@
           </div>
         </div>
 
-        <!-- STATS CARDS -->
+        <!-- ANALISIS PER KATEGORI -->
         <div class="chart-card full-width">
           <div class="chart-title" style="margin-bottom: 15px">
-            Analisis Detail per Kategori
+            Analisis Per Kategori
           </div>
-          <div class="stats-grid">
-            <div class="stat-card">
-              <div class="stat-card-icon">🏠</div>
-              <div class="stat-card-label">Tempat Tinggal</div>
-              <div class="stat-card-value">3.5M</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-card-icon">🍔</div>
-              <div class="stat-card-label">Makanan</div>
-              <div class="stat-card-value">2.8M</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-card-icon">🛒</div>
-              <div class="stat-card-label">Belanja</div>
-              <div class="stat-card-value">2.1M</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-card-icon">🎮</div>
-              <div class="stat-card-label">Hiburan</div>
-              <div class="stat-card-value">1.6M</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-card-icon">🚗</div>
-              <div class="stat-card-label">Transportasi</div>
-              <div class="stat-card-value">1.5M</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-card-icon">💊</div>
-              <div class="stat-card-label">Kesehatan</div>
-              <div class="stat-card-value">850K</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-card-icon">📱</div>
-              <div class="stat-card-label">Tagihan</div>
-              <div class="stat-card-value">350K</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-card-icon">📚</div>
-              <div class="stat-card-label">Pendidikan</div>
-              <div class="stat-card-value">150K</div>
-            </div>
+          <div class="stats-grid" id="categoryStatsGrid">
+            <div class="loading-placeholder" style="height: 80px"></div>
+            <div class="loading-placeholder" style="height: 80px"></div>
+            <div class="loading-placeholder" style="height: 80px"></div>
+            <div class="loading-placeholder" style="height: 80px"></div>
           </div>
         </div>
       </div>
     </div>
 
-    <script>
-      // === COLOR PALETTE (RED THEME) ===
-      const colors = {
-        primary: "#e74c3c",
-        secondary: "#c0392b",
-        danger: "#d32f2f",
-        orange: "#e67e22",
-        purple: "#8e44ad",
-        teal: "#16a085",
-        yellow: "#f39c12",
-        pink: "#e91e63",
+    <script type="module">
+      import { transactionAPI } from "../js/api.js";
+
+      // ============================================
+      // MAPPING category_id → { nama, emoji }
+      // ID 9-16 = pengeluaran (sesuai database)
+      // ============================================
+      const CATEGORY_MAP = {
+        9: { nama: "Makanan", emoji: "🍔" },
+        10: { nama: "Transportasi", emoji: "🚗" },
+        11: { nama: "Belanja", emoji: "🛒" },
+        12: { nama: "Hiburan", emoji: "🎮" },
+        13: { nama: "Kesehatan", emoji: "💊" },
+        14: { nama: "Pendidikan", emoji: "📚" },
+        15: { nama: "Tagihan", emoji: "📱" },
+        16: { nama: "Tempat Tinggal", emoji: "🏠" },
+        8: { nama: "Lainnya", emoji: "📦" }, // fallback
       };
 
-      // === 1. TREND LINE CHART ===
-      const trendCtx = document.getElementById("trendChart").getContext("2d");
-      const trendChart = new Chart(trendCtx, {
-        type: "line",
-        data: {
-          labels: [
-            "1 Jan",
-            "5 Jan",
-            "10 Jan",
-            "15 Jan",
-            "20 Jan",
-            "25 Jan",
-            "30 Jan",
-          ],
-          datasets: [
-            {
-              label: "Pengeluaran",
-              data: [
-                0, 1500000, 3800000, 7200000, 10500000, 12000000, 12350000,
-              ],
-              borderColor: colors.primary,
-              backgroundColor: "rgba(231, 76, 60, 0.1)",
-              tension: 0.4,
-              fill: true,
-              pointRadius: 6,
-              pointHoverRadius: 8,
-              pointBackgroundColor: colors.primary,
-              pointBorderColor: "#fff",
-              pointBorderWidth: 3,
-            },
-          ],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              display: false,
-            },
-            tooltip: {
-              callbacks: {
-                label: function (context) {
-                  return "Rp" + context.parsed.y.toLocaleString("id-ID");
-                },
-              },
-              backgroundColor: "rgba(0, 0, 0, 0.8)",
-              padding: 12,
-              titleFont: { size: 14 },
-              bodyFont: { size: 13 },
-            },
-          },
-          scales: {
-            y: {
-              beginAtZero: true,
-              ticks: {
-                callback: function (value) {
-                  return "Rp" + (value / 1000000).toFixed(1) + "M";
-                },
-              },
-              grid: {
-                color: "rgba(0, 0, 0, 0.05)",
-              },
-            },
-            x: {
-              grid: {
-                display: false,
-              },
-            },
-          },
-        },
-      });
+      const CHART_COLORS = [
+        "#e74c3c",
+        "#e67e22",
+        "#8e44ad",
+        "#f39c12",
+        "#16a085",
+        "#e91e63",
+        "#d32f2f",
+        "#c0392b",
+      ];
 
-      // === 2. PIE CHART - KATEGORI ===
-      const categoryCtx = document
-        .getElementById("categoryChart")
-        .getContext("2d");
-      const categoryChart = new Chart(categoryCtx, {
-        type: "doughnut",
-        data: {
-          labels: [
-            "Tempat Tinggal",
-            "Makanan",
-            "Belanja",
-            "Hiburan",
-            "Transportasi",
-            "Kesehatan",
-            "Tagihan",
-            "Pendidikan",
-          ],
-          datasets: [
-            {
-              data: [
-                3500000, 2800000, 2100000, 1600000, 1500000, 850000, 350000,
-                150000,
-              ],
-              backgroundColor: [
-                colors.primary,
-                colors.orange,
-                colors.purple,
-                colors.yellow,
-                colors.teal,
-                colors.pink,
-                colors.danger,
-                colors.secondary,
-              ],
-              borderWidth: 0,
-            },
-          ],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              position: "bottom",
-              labels: {
-                padding: 15,
-                font: { size: 11 },
-                usePointStyle: true,
-              },
-            },
-            tooltip: {
-              callbacks: {
-                label: function (context) {
-                  const label = context.label || "";
-                  const value = "Rp" + context.parsed.toLocaleString("id-ID");
-                  const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                  const percentage = ((context.parsed / total) * 100).toFixed(
-                    1,
-                  );
-                  return `${label}: ${value} (${percentage}%)`;
-                },
-              },
-              backgroundColor: "rgba(0, 0, 0, 0.8)",
-              padding: 12,
-            },
-          },
-          cutout: "60%",
-        },
-      });
+      function formatRupiah(num) {
+        return "Rp" + Number(num).toLocaleString("id-ID");
+      }
+      function formatShort(num) {
+        if (num >= 1000000) return (num / 1000000).toFixed(1) + "M";
+        if (num >= 1000) return Math.round(num / 1000) + "K";
+        return num.toLocaleString("id-ID");
+      }
+      function formatDate(dateStr) {
+        if (!dateStr) return "-";
+        return new Date(dateStr).toLocaleDateString("id-ID", {
+          day: "numeric",
+          month: "short",
+        });
+      }
+      function getCurrentPeriod() {
+        return new Date().toLocaleDateString("id-ID", {
+          month: "long",
+          year: "numeric",
+        });
+      }
+      function getWeekOfMonth(dateStr) {
+        return Math.min(Math.ceil(new Date(dateStr).getDate() / 7), 4);
+      }
 
-      // === 3. BAR CHART - MINGGUAN ===
-      const weeklyCtx = document.getElementById("weeklyChart").getContext("2d");
-      const weeklyChart = new Chart(weeklyCtx, {
-        type: "bar",
-        data: {
-          labels: ["Minggu 1", "Minggu 2", "Minggu 3", "Minggu 4"],
-          datasets: [
-            {
-              label: "Pengeluaran",
-              data: [1500000, 2300000, 3700000, 4850000],
-              backgroundColor: [
-                "rgba(231, 76, 60, 0.8)",
-                "rgba(230, 126, 34, 0.8)",
-                "rgba(142, 68, 173, 0.8)",
-                "rgba(243, 156, 18, 0.8)",
+      function getCategoryInfo(trx) {
+        if (trx.category_id && CATEGORY_MAP[trx.category_id]) {
+          return CATEGORY_MAP[trx.category_id];
+        }
+        if (trx.category) {
+          const emojiMap = {
+            makanan: "🍔",
+            transportasi: "🚗",
+            belanja: "🛒",
+            hiburan: "🎮",
+            kesehatan: "💊",
+            pendidikan: "📚",
+            tagihan: "📱",
+            tempat_tinggal: "🏠",
+            lainnya: "📦",
+          };
+          const key = trx.category.toLowerCase().trim();
+          return {
+            nama: key
+              .replace(/_/g, " ")
+              .replace(/\b\w/g, (c) => c.toUpperCase()),
+            emoji: emojiMap[key] || "📦",
+          };
+        }
+        return { nama: "Lainnya", emoji: "📦" };
+      }
+
+      let charts = {};
+
+      async function loadPage() {
+        try {
+          const [allTransactions, summary] = await Promise.all([
+            transactionAPI.getAll(),
+            transactionAPI.getSummary(),
+          ]);
+
+          const now = new Date();
+
+          // Filter expense bulan ini
+          const expenseTransactions = allTransactions.filter((trx) => {
+            const isExpense =
+              trx.type === "expense" || trx.type === "pengeluaran";
+            if (!isExpense) return false;
+            if (!trx.transaction_date) return true;
+            const d = new Date(trx.transaction_date);
+            return (
+              d.getMonth() === now.getMonth() &&
+              d.getFullYear() === now.getFullYear()
+            );
+          });
+
+          // ===== SUMMARY =====
+          const totalExpense = Number(summary.total_expense) || 0;
+          document.getElementById("totalExpense").textContent =
+            formatRupiah(totalExpense);
+          document.getElementById("summaryPeriod").textContent =
+            "📅 " + getCurrentPeriod();
+          document.getElementById("chartPeriodLabel").textContent =
+            getCurrentPeriod();
+
+          const count = expenseTransactions.length;
+          const amounts = expenseTransactions.map((t) => Number(t.amount));
+          const avg = count > 0 ? Math.round(totalExpense / count) : 0;
+          const max = count > 0 ? Math.max(...amounts) : 0;
+          const min = count > 0 ? Math.min(...amounts) : 0;
+
+          document.getElementById("statCount").textContent = count;
+          document.getElementById("statAverage").textContent = formatShort(avg);
+          document.getElementById("statMax").textContent = formatShort(max);
+          document.getElementById("statMin").textContent = formatShort(min);
+
+          const sorted = [...expenseTransactions].sort(
+            (a, b) =>
+              new Date(a.transaction_date) - new Date(b.transaction_date),
+          );
+
+          // ===== 1. TREND LINE CHART =====
+          const trendLabels = sorted.map((t) => formatDate(t.transaction_date));
+          let cumulative = 0;
+          const trendData = sorted.map((t) => {
+            cumulative += Number(t.amount);
+            return cumulative;
+          });
+
+          if (trendLabels.length === 0) {
+            trendLabels.push("Belum ada");
+            trendData.push(0);
+          }
+
+          if (charts.trend) charts.trend.destroy();
+          charts.trend = new Chart(document.getElementById("trendChart"), {
+            type: "line",
+            data: {
+              labels: trendLabels,
+              datasets: [
+                {
+                  label: "Pengeluaran Kumulatif",
+                  data: trendData,
+                  borderColor: "#e74c3c",
+                  backgroundColor: "rgba(231,76,60,0.1)",
+                  tension: 0.4,
+                  fill: true,
+                  pointRadius: 6,
+                  pointHoverRadius: 8,
+                  pointBackgroundColor: "#e74c3c",
+                  pointBorderColor: "#fff",
+                  pointBorderWidth: 3,
+                },
               ],
-              borderRadius: 8,
-              borderWidth: 0,
             },
-          ],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              display: false,
-            },
-            tooltip: {
-              callbacks: {
-                label: function (context) {
-                  return "Rp" + context.parsed.y.toLocaleString("id-ID");
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  callbacks: { label: (ctx) => formatRupiah(ctx.parsed.y) },
+                  backgroundColor: "rgba(0,0,0,0.8)",
+                  padding: 12,
+                  titleFont: { size: 14 },
+                  bodyFont: { size: 13 },
                 },
               },
-              backgroundColor: "rgba(0, 0, 0, 0.8)",
-              padding: 12,
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  ticks: {
+                    callback: (v) => "Rp" + (v / 1000000).toFixed(1) + "M",
+                  },
+                  grid: { color: "rgba(0,0,0,0.05)" },
+                },
+                x: { grid: { display: false } },
+              },
             },
-          },
-          scales: {
-            y: {
-              beginAtZero: true,
-              ticks: {
-                callback: function (value) {
-                  return "Rp" + (value / 1000000).toFixed(1) + "M";
+          });
+
+          // ===== 2. PIE CHART - KATEGORI =====
+          const categoryMap = {};
+          expenseTransactions.forEach((trx) => {
+            const { nama } = getCategoryInfo(trx);
+            if (!categoryMap[nama]) categoryMap[nama] = 0;
+            categoryMap[nama] += Number(trx.amount);
+          });
+
+          const catEntries = Object.entries(categoryMap).sort(
+            (a, b) => b[1] - a[1],
+          );
+          const catLabels = catEntries.map(([k]) => k);
+          const catData = catEntries.map(([, v]) => v);
+
+          if (catLabels.length === 0) {
+            catLabels.push("Belum ada data");
+            catData.push(1);
+          }
+
+          if (charts.category) charts.category.destroy();
+          charts.category = new Chart(
+            document.getElementById("categoryChart"),
+            {
+              type: "doughnut",
+              data: {
+                labels: catLabels,
+                datasets: [
+                  {
+                    data: catData,
+                    backgroundColor: CHART_COLORS.slice(0, catLabels.length),
+                    borderWidth: 0,
+                  },
+                ],
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: {
+                    position: "bottom",
+                    labels: {
+                      padding: 15,
+                      font: { size: 11 },
+                      usePointStyle: true,
+                    },
+                  },
+                  tooltip: {
+                    callbacks: {
+                      label: (ctx) => {
+                        const total = ctx.dataset.data.reduce(
+                          (a, b) => a + b,
+                          0,
+                        );
+                        const pct = ((ctx.parsed / total) * 100).toFixed(1);
+                        return `${ctx.label}: ${formatRupiah(ctx.parsed)} (${pct}%)`;
+                      },
+                    },
+                    backgroundColor: "rgba(0,0,0,0.8)",
+                    padding: 12,
+                  },
+                },
+                cutout: "60%",
+              },
+            },
+          );
+
+          // ===== 3. BAR CHART - MINGGUAN =====
+          const weeklyTotals = [0, 0, 0, 0];
+          expenseTransactions.forEach((trx) => {
+            if (!trx.transaction_date) return;
+            const week = getWeekOfMonth(trx.transaction_date) - 1;
+            weeklyTotals[week] += Number(trx.amount);
+          });
+
+          if (charts.weekly) charts.weekly.destroy();
+          charts.weekly = new Chart(document.getElementById("weeklyChart"), {
+            type: "bar",
+            data: {
+              labels: ["Minggu 1", "Minggu 2", "Minggu 3", "Minggu 4"],
+              datasets: [
+                {
+                  label: "Pengeluaran",
+                  data: weeklyTotals,
+                  backgroundColor: [
+                    "rgba(231,76,60,0.8)",
+                    "rgba(230,126,34,0.8)",
+                    "rgba(142,68,173,0.8)",
+                    "rgba(243,156,18,0.8)",
+                  ],
+                  borderRadius: 8,
+                  borderWidth: 0,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  callbacks: { label: (ctx) => formatRupiah(ctx.parsed.y) },
+                  backgroundColor: "rgba(0,0,0,0.8)",
+                  padding: 12,
                 },
               },
-              grid: {
-                color: "rgba(0, 0, 0, 0.05)",
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  ticks: {
+                    callback: (v) => "Rp" + (v / 1000000).toFixed(1) + "M",
+                  },
+                  grid: { color: "rgba(0,0,0,0.05)" },
+                },
+                x: { grid: { display: false } },
               },
             },
-            x: {
-              grid: {
-                display: false,
-              },
-            },
-          },
-        },
-      });
+          });
+
+          // ===== 4. ANALISIS PER KATEGORI =====
+          const catDetailMap = {};
+          expenseTransactions.forEach((trx) => {
+            const { nama, emoji } = getCategoryInfo(trx);
+            if (!catDetailMap[nama])
+              catDetailMap[nama] = { emoji, total: 0, count: 0 };
+            catDetailMap[nama].total += Number(trx.amount);
+            catDetailMap[nama].count += 1;
+          });
+
+          const grid = document.getElementById("categoryStatsGrid");
+          grid.innerHTML = "";
+
+          const catDetailEntries = Object.entries(catDetailMap).sort(
+            (a, b) => b[1].total - a[1].total,
+          );
+
+          if (catDetailEntries.length === 0) {
+            grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;color:#999;padding:30px;">Belum ada transaksi pengeluaran bulan ini</div>`;
+          } else {
+            catDetailEntries.forEach(([nama, data]) => {
+              const card = document.createElement("div");
+              card.className = "stat-card";
+              card.innerHTML = `
+                <div class="stat-card-icon">${data.emoji}</div>
+                <div class="stat-card-label">${nama} <span style="color:#bbb">(${data.count}x)</span></div>
+                <div class="stat-card-value">${formatShort(data.total)}</div>
+              `;
+              grid.appendChild(card);
+            });
+          }
+        } catch (err) {
+          console.error(err);
+          alert("Gagal memuat data. Silakan login ulang.");
+          localStorage.removeItem("token");
+          window.location.href = "../Utama/login.html";
+        }
+      }
+
+      loadPage();
     </script>
   </body>
 </html>

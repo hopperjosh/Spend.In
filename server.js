@@ -26,7 +26,9 @@ app.get("/", (req, res) => {
 // ================== AUTH MIDDLEWARE ==================
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
-  if (!authHeader) return res.status(401).json({ message: "Token ga ada bro" });
+  if (!authHeader) {
+    return res.status(401).json({ message: "Token ga ada bro" });
+  }
 
   const token = authHeader.split(" ")[1];
 
@@ -114,6 +116,7 @@ app.get("/profile", authenticateToken, async (req, res) => {
 
     res.json(result.rows[0]);
   } catch (err) {
+    console.error("PROFILE ERROR:", err);
     res.status(500).json({ message: "Server error bro" });
   }
 });
@@ -121,35 +124,57 @@ app.get("/profile", authenticateToken, async (req, res) => {
 // ================== CREATE TRANSACTION ==================
 app.post("/transactions", authenticateToken, async (req, res) => {
   try {
-    const {
-      wallet_id,
-      category_id,
-      amount,
-      type,
-      description,
-      transaction_date,
-    } = req.body;
+    let { amount, description, transaction_date, type } = req.body;
 
+    if (!amount || !type) {
+      return res.status(400).json({
+        message: "Amount dan type wajib diisi bro",
+      });
+    }
+
+    if (!transaction_date) {
+      transaction_date = new Date().toISOString().split("T")[0];
+    }
+
+    // ================== CEK WALLET ==================
+    let wallet = await pool.query(
+      "SELECT id FROM wallets WHERE user_id=$1 LIMIT 1",
+      [req.user.user_id],
+    );
+
+    // kalau belum ada wallet → buat otomatis
+    if (wallet.rows.length === 0) {
+      wallet = await pool.query(
+        "INSERT INTO wallets (name, user_id) VALUES ($1, $2) RETURNING id",
+        ["Main Wallet", req.user.user_id],
+      );
+    }
+
+    const wallet_id = wallet.rows[0].id;
+
+    // ================== INSERT TRANSACTION ==================
     const result = await pool.query(
-      `INSERT INTO transactions
-       (user_id, wallet_id, category_id, amount, type, description, transaction_date, created_at)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,NOW())
+      `INSERT INTO transactions 
+       (user_id, wallet_id, amount, description, transaction_date, type, created_at)
+       VALUES ($1, $2, $3, $4, $5, $6, NOW())
        RETURNING *`,
       [
         req.user.user_id,
         wallet_id,
-        category_id,
         amount,
-        type,
-        description,
+        description || "",
         transaction_date,
+        type,
       ],
     );
 
-    res.status(201).json(result.rows[0]);
+    res.status(201).json({
+      message: "Transaksi berhasil 🔥",
+      transaction: result.rows[0],
+    });
   } catch (err) {
     console.error("CREATE TRANSACTION ERROR:", err);
-    res.status(500).json({ message: "Server error bro" });
+    res.status(500).json({ message: err.message });
   }
 });
 
@@ -179,7 +204,9 @@ app.delete("/transactions/:id", authenticateToken, async (req, res) => {
     );
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ message: "Transaksi ga ketemu bro" });
+      return res.status(404).json({
+        message: "Transaksi ga ketemu bro",
+      });
     }
 
     res.json({ message: "Transaksi berhasil dihapus 🔥" });
@@ -213,8 +240,8 @@ app.put("/transactions/:id", authenticateToken, async (req, res) => {
        WHERE id=$7 AND user_id=$8
        RETURNING *`,
       [
-        wallet_id,
-        category_id,
+        wallet_id || 1,
+        category_id || 1,
         amount,
         type,
         description,
@@ -225,7 +252,9 @@ app.put("/transactions/:id", authenticateToken, async (req, res) => {
     );
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ message: "Transaksi ga ketemu bro" });
+      return res.status(404).json({
+        message: "Transaksi ga ketemu bro",
+      });
     }
 
     res.json(result.rows[0]);
@@ -262,6 +291,7 @@ app.get("/transactions/summary", authenticateToken, async (req, res) => {
     res.status(500).json({ message: "Server error bro" });
   }
 });
+
 // ================== START SERVER ==================
 const PORT = 3000;
 app.listen(PORT, () => {

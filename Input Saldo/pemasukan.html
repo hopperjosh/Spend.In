@@ -14,7 +14,6 @@
 
       body {
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        /* Background gradasi abu-abu ke hijau */
         background: linear-gradient(
           180deg,
           #6b7280 0%,
@@ -196,6 +195,7 @@
         background: #f8f9fa;
         border-radius: 12px;
         transition: all 0.3s;
+        cursor: pointer;
       }
 
       .category-item:hover {
@@ -283,6 +283,7 @@
         border-radius: 12px;
         border: 2px solid #f0f0f0;
         transition: all 0.3s;
+        cursor: pointer;
       }
 
       .transaction-item:hover {
@@ -340,20 +341,42 @@
         font-size: 16px;
       }
 
+      /* === LOADING === */
+      .loading-placeholder {
+        background: linear-gradient(
+          90deg,
+          #f0f0f0 25%,
+          #e0e0e0 50%,
+          #f0f0f0 75%
+        );
+        background-size: 200% 100%;
+        animation: shimmer 1.5s infinite;
+        border-radius: 8px;
+        height: 24px;
+        width: 60%;
+        margin: 8px 0;
+      }
+
+      @keyframes shimmer {
+        0% {
+          background-position: 200% 0;
+        }
+        100% {
+          background-position: -200% 0;
+        }
+      }
+
       /* === RESPONSIVE === */
       @media (min-width: 768px) {
         .container {
           padding: 30px;
         }
-
         .summary-amount {
           font-size: 48px;
         }
-
         .summary-stats {
           grid-template-columns: repeat(4, 1fr);
         }
-
         .chart-container {
           height: 300px;
         }
@@ -363,18 +386,15 @@
         .container {
           padding: 40px;
         }
-
         .content-grid {
           display: grid;
           grid-template-columns: 2fr 1fr;
           gap: 25px;
         }
-
         .left-column {
           display: flex;
           flex-direction: column;
         }
-
         .right-column {
           display: flex;
           flex-direction: column;
@@ -395,31 +415,30 @@
       <!-- SUMMARY CARD -->
       <div class="summary-card">
         <div class="summary-label">Total Pemasukan</div>
-        <div class="summary-amount">Rp8.500.000</div>
-        <div class="summary-period">📅 Januari 2026</div>
-
+        <div class="summary-amount" id="totalIncome">Memuat...</div>
+        <div class="summary-period" id="summaryPeriod">📅 Memuat...</div>
         <div class="summary-stats">
           <div class="stat-item">
             <div class="stat-label">Transaksi</div>
-            <div class="stat-value">12</div>
+            <div class="stat-value" id="statCount">-</div>
           </div>
           <div class="stat-item">
             <div class="stat-label">Rata-rata</div>
-            <div class="stat-value">708K</div>
+            <div class="stat-value" id="statAverage">-</div>
           </div>
           <div class="stat-item">
             <div class="stat-label">Terbesar</div>
-            <div class="stat-value">5.0M</div>
+            <div class="stat-value" id="statMax">-</div>
           </div>
           <div class="stat-item">
             <div class="stat-label">Terkecil</div>
-            <div class="stat-value">50K</div>
+            <div class="stat-value" id="statMin">-</div>
           </div>
         </div>
       </div>
 
       <!-- ADD INCOME BUTTON -->
-      <button class="add-income-btn">
+      <button class="add-income-btn" id="addIncomeBtn">
         <span>Tambah Pemasukan</span>
         <span style="font-size: 24px">+</span>
       </button>
@@ -438,53 +457,19 @@
           <div class="transaction-section">
             <div class="transaction-header">
               <div class="transaction-title">Riwayat Transaksi</div>
-              <button class="filter-btn">Filter 🔽</button>
+              <button class="filter-btn" id="filterBtn">Filter 🔽</button>
             </div>
-
-            <!-- Transaction Items -->
-            <div class="transaction-item">
-              <div class="transaction-icon">💰</div>
-              <div class="transaction-info">
-                <div class="transaction-name">Gaji Bulanan</div>
-                <div class="transaction-date">20 Jan 2026</div>
+            <div id="transactionList">
+              <div class="empty-state">
+                <div
+                  class="loading-placeholder"
+                  style="width: 80%; margin: 0 auto 10px"
+                ></div>
+                <div
+                  class="loading-placeholder"
+                  style="width: 60%; margin: 0 auto"
+                ></div>
               </div>
-              <div class="transaction-amount">+Rp5.000.000</div>
-            </div>
-
-            <div class="transaction-item">
-              <div class="transaction-icon">💼</div>
-              <div class="transaction-info">
-                <div class="transaction-name">Freelance Project</div>
-                <div class="transaction-date">18 Jan 2026</div>
-              </div>
-              <div class="transaction-amount">+Rp2.500.000</div>
-            </div>
-
-            <div class="transaction-item">
-              <div class="transaction-icon">🎁</div>
-              <div class="transaction-info">
-                <div class="transaction-name">Bonus</div>
-                <div class="transaction-date">15 Jan 2026</div>
-              </div>
-              <div class="transaction-amount">+Rp500.000</div>
-            </div>
-
-            <div class="transaction-item">
-              <div class="transaction-icon">📈</div>
-              <div class="transaction-info">
-                <div class="transaction-name">Dividen Investasi</div>
-                <div class="transaction-date">10 Jan 2026</div>
-              </div>
-              <div class="transaction-amount">+Rp300.000</div>
-            </div>
-
-            <div class="transaction-item">
-              <div class="transaction-icon">🛍️</div>
-              <div class="transaction-info">
-                <div class="transaction-name">Penjualan Online</div>
-                <div class="transaction-date">8 Jan 2026</div>
-              </div>
-              <div class="transaction-amount">+Rp200.000</div>
             </div>
           </div>
         </div>
@@ -493,136 +478,289 @@
           <!-- CATEGORY BREAKDOWN -->
           <div class="category-section">
             <div class="category-title">Berdasarkan Kategori</div>
-
-            <div class="category-item">
-              <div class="category-icon">💰</div>
-              <div class="category-info">
-                <div class="category-name">Gaji</div>
-                <div class="category-count">1 transaksi</div>
-              </div>
-              <div class="category-amount">5.0M</div>
-            </div>
-
-            <div class="category-item">
-              <div class="category-icon">💼</div>
-              <div class="category-info">
-                <div class="category-name">Freelance</div>
-                <div class="category-count">3 transaksi</div>
-              </div>
-              <div class="category-amount">2.5M</div>
-            </div>
-
-            <div class="category-item">
-              <div class="category-icon">📈</div>
-              <div class="category-info">
-                <div class="category-name">Investasi</div>
-                <div class="category-count">4 transaksi</div>
-              </div>
-              <div class="category-amount">600K</div>
-            </div>
-
-            <div class="category-item">
-              <div class="category-icon">🎁</div>
-              <div class="category-info">
-                <div class="category-name">Bonus</div>
-                <div class="category-count">2 transaksi</div>
-              </div>
-              <div class="category-amount">300K</div>
-            </div>
-
-            <div class="category-item">
-              <div class="category-icon">🛍️</div>
-              <div class="category-info">
-                <div class="category-name">Penjualan</div>
-                <div class="category-count">2 transaksi</div>
-              </div>
-              <div class="category-amount">100K</div>
+            <div id="categoryList">
+              <div
+                class="loading-placeholder"
+                style="width: 100%; height: 60px; margin-bottom: 12px"
+              ></div>
+              <div
+                class="loading-placeholder"
+                style="width: 100%; height: 60px; margin-bottom: 12px"
+              ></div>
+              <div
+                class="loading-placeholder"
+                style="width: 100%; height: 60px"
+              ></div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
+    <!-- NON-MODULE: UI interactions -->
     <script>
-      // === CHART.JS - INCOME TREND ===
-      const ctx = document.getElementById("incomeChart").getContext("2d");
-
-      const incomeChart = new Chart(ctx, {
-        type: "line",
-        data: {
-          labels: ["1 Jan", "5 Jan", "10 Jan", "15 Jan", "20 Jan", "25 Jan"],
-          datasets: [
-            {
-              label: "Pemasukan",
-              data: [0, 500000, 800000, 1300000, 6300000, 8500000],
-              borderColor: "#5dade2",
-              backgroundColor: "rgba(93, 173, 226, 0.1)",
-              tension: 0.4,
-              fill: true,
-              pointRadius: 5,
-              pointHoverRadius: 7,
-              pointBackgroundColor: "#5dade2",
-              pointBorderColor: "#fff",
-              pointBorderWidth: 2,
-            },
-          ],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              display: false,
-            },
-            tooltip: {
-              callbacks: {
-                label: function (context) {
-                  return "Rp" + context.parsed.y.toLocaleString("id-ID");
-                },
-              },
-            },
-          },
-          scales: {
-            y: {
-              beginAtZero: true,
-              ticks: {
-                callback: function (value) {
-                  return "Rp" + (value / 1000000).toFixed(1) + "M";
-                },
-              },
-            },
-          },
-        },
-      });
-
-      // === EVENT LISTENERS ===
       document
-        .querySelector(".add-income-btn")
+        .getElementById("addIncomeBtn")
         .addEventListener("click", function () {
           window.location.href = "tambah-pemasukan.html";
         });
 
       document
-        .querySelector(".filter-btn")
+        .getElementById("filterBtn")
         .addEventListener("click", function () {
           alert(
             "Filter transaksi:\n- Semua\n- Minggu ini\n- Bulan ini\n- Custom date",
           );
         });
+    </script>
 
-      // Transaction items click
-      document.querySelectorAll(".transaction-item").forEach((item) => {
-        item.addEventListener("click", function () {
-          alert("Detail transaksi akan ditampilkan di sini");
-        });
-      });
+    <!-- MODULE: API Integration -->
+    <script type="module">
+      import { transactionAPI } from "../js/api.js";
 
-      // Category items click
-      document.querySelectorAll(".category-item").forEach((item) => {
-        item.addEventListener("click", function () {
-          alert("Filter berdasarkan kategori ini");
+      // Emoji map per kategori (semua lowercase)
+      const categoryEmoji = {
+        gaji: "💰",
+        freelance: "💼",
+        investasi: "📈",
+        bonus: "🎁",
+        penjualan: "🛍️",
+        hadiah: "🎉",
+        refund: "↩️",
+        lainnya: "📦",
+      };
+
+      // Ambil emoji dengan case-insensitive + trim, fallback ke 📦
+      function getEmoji(cat) {
+        if (!cat) return "📦";
+        const key = cat.trim().toLowerCase();
+        return categoryEmoji[key] || "📦";
+      }
+
+      // Kapitalisasi nama kategori dengan aman
+      function capCategory(cat) {
+        if (!cat) return "Lainnya";
+        const s = cat.trim();
+        return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+      }
+
+      // Format rupiah singkat (misal: 5.0M, 500K)
+      function formatShort(num) {
+        if (num >= 1000000) return (num / 1000000).toFixed(1) + "M";
+        if (num >= 1000) return Math.round(num / 1000) + "K";
+        return num.toLocaleString("id-ID");
+      }
+
+      // Format rupiah lengkap
+      function formatRupiah(num) {
+        return "Rp" + Number(num).toLocaleString("id-ID");
+      }
+
+      // Format tanggal dari ISO ke "20 Jan 2026"
+      function formatDate(dateStr) {
+        if (!dateStr) return "-";
+        const d = new Date(dateStr);
+        return d.toLocaleDateString("id-ID", {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
         });
-      });
+      }
+
+      // Nama bulan saat ini
+      function getCurrentPeriod() {
+        return new Date().toLocaleDateString("id-ID", {
+          month: "long",
+          year: "numeric",
+        });
+      }
+
+      let chartInstance = null;
+
+      async function loadPage() {
+        try {
+          // Ambil semua transaksi & summary dari API
+          const [allTransactions, summary] = await Promise.all([
+            transactionAPI.getAll(),
+            transactionAPI.getSummary(),
+          ]);
+
+          // Filter hanya transaksi income bulan ini
+          const now = new Date();
+          const incomeTransactions = allTransactions.filter((trx) => {
+            const isIncome = trx.type === "income" || trx.type === "pemasukan";
+            if (!isIncome) return false;
+            if (!trx.transaction_date) return true; // tetap tampilkan jika tanpa tanggal
+            const trxDate = new Date(trx.transaction_date);
+            return (
+              trxDate.getMonth() === now.getMonth() &&
+              trxDate.getFullYear() === now.getFullYear()
+            );
+          });
+
+          // ===== SUMMARY CARD =====
+          const totalIncome = Number(summary.total_income) || 0;
+          document.getElementById("totalIncome").textContent =
+            formatRupiah(totalIncome);
+          document.getElementById("summaryPeriod").textContent =
+            "📅 " + getCurrentPeriod();
+
+          const count = incomeTransactions.length;
+          const amounts = incomeTransactions.map((t) => Number(t.amount));
+          const avg = count > 0 ? Math.round(totalIncome / count) : 0;
+          const max = count > 0 ? Math.max(...amounts) : 0;
+          const min = count > 0 ? Math.min(...amounts) : 0;
+
+          document.getElementById("statCount").textContent = count;
+          document.getElementById("statAverage").textContent = formatShort(avg);
+          document.getElementById("statMax").textContent = formatShort(max);
+          document.getElementById("statMin").textContent = formatShort(min);
+
+          // ===== CHART - TREN KUMULATIF =====
+          // Sort by date ascending
+          const sorted = [...incomeTransactions].sort(
+            (a, b) =>
+              new Date(a.transaction_date) - new Date(b.transaction_date),
+          );
+
+          const chartLabels = sorted.map((t) => formatDate(t.transaction_date));
+          // Kumulatif
+          let cumulative = 0;
+          const chartData = sorted.map((t) => {
+            cumulative += Number(t.amount);
+            return cumulative;
+          });
+
+          // Jika tidak ada data, tampilkan placeholder kosong
+          if (chartLabels.length === 0) {
+            chartLabels.push("Belum ada data");
+            chartData.push(0);
+          }
+
+          const ctx = document.getElementById("incomeChart").getContext("2d");
+          if (chartInstance) chartInstance.destroy();
+          chartInstance = new Chart(ctx, {
+            type: "line",
+            data: {
+              labels: chartLabels,
+              datasets: [
+                {
+                  label: "Pemasukan Kumulatif",
+                  data: chartData,
+                  borderColor: "#5dade2",
+                  backgroundColor: "rgba(93, 173, 226, 0.1)",
+                  tension: 0.4,
+                  fill: true,
+                  pointRadius: 5,
+                  pointHoverRadius: 7,
+                  pointBackgroundColor: "#5dade2",
+                  pointBorderColor: "#fff",
+                  pointBorderWidth: 2,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  callbacks: {
+                    label: (context) => formatRupiah(context.parsed.y),
+                  },
+                },
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  ticks: {
+                    callback: (value) =>
+                      "Rp" + (value / 1000000).toFixed(1) + "M",
+                  },
+                },
+              },
+            },
+          });
+
+          // ===== CATEGORY BREAKDOWN =====
+          const categoryMap = {};
+          incomeTransactions.forEach((trx) => {
+            // Normalisasi key kategori ke lowercase+trim agar konsisten
+            const cat = (trx.category || "lainnya").trim().toLowerCase();
+            if (!categoryMap[cat]) categoryMap[cat] = { total: 0, count: 0 };
+            categoryMap[cat].total += Number(trx.amount);
+            categoryMap[cat].count += 1;
+          });
+
+          const categoryList = document.getElementById("categoryList");
+          categoryList.innerHTML = "";
+
+          const sortedCategories = Object.entries(categoryMap).sort(
+            (a, b) => b[1].total - a[1].total,
+          );
+
+          if (sortedCategories.length === 0) {
+            categoryList.innerHTML = `
+              <div class="empty-state">
+                <div class="empty-icon">📭</div>
+                <div class="empty-text">Belum ada pemasukan bulan ini</div>
+              </div>`;
+          } else {
+            sortedCategories.forEach(([cat, data]) => {
+              const el = document.createElement("div");
+              el.className = "category-item";
+              el.innerHTML = `
+                <div class="category-icon">${getEmoji(cat)}</div>
+                <div class="category-info">
+                  <div class="category-name">${capCategory(cat)}</div>
+                  <div class="category-count">${data.count} transaksi</div>
+                </div>
+                <div class="category-amount">${formatShort(data.total)}</div>
+              `;
+              categoryList.appendChild(el);
+            });
+          }
+
+          // ===== TRANSACTION LIST =====
+          const transactionList = document.getElementById("transactionList");
+          transactionList.innerHTML = "";
+
+          if (incomeTransactions.length === 0) {
+            transactionList.innerHTML = `
+              <div class="empty-state">
+                <div class="empty-icon">💸</div>
+                <div class="empty-text">Belum ada transaksi pemasukan bulan ini</div>
+              </div>`;
+          } else {
+            // Tampilkan dari yang terbaru
+            const sorted2 = [...incomeTransactions].sort(
+              (a, b) =>
+                new Date(b.transaction_date) - new Date(a.transaction_date),
+            );
+            sorted2.forEach((trx) => {
+              const cat = (trx.category || "lainnya").trim().toLowerCase();
+              const el = document.createElement("div");
+              el.className = "transaction-item";
+              el.innerHTML = `
+                <div class="transaction-icon">${getEmoji(cat)}</div>
+                <div class="transaction-info">
+                  <div class="transaction-name">${trx.description || capCategory(cat)}</div>
+                  <div class="transaction-date">${formatDate(trx.transaction_date)}</div>
+                </div>
+                <div class="transaction-amount">+${formatRupiah(trx.amount)}</div>
+              `;
+              transactionList.appendChild(el);
+            });
+          }
+        } catch (err) {
+          console.error(err);
+          alert("Gagal memuat data. Silakan login ulang.");
+          localStorage.removeItem("token");
+          window.location.href = "../Utama/login.html";
+        }
+      }
+
+      loadPage();
     </script>
   </body>
 </html>

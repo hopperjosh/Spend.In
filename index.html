@@ -412,6 +412,15 @@
         background-color: #3d7f6f;
       }
 
+      /* === LOADING STATE === */
+      .loading-text {
+        color: rgba(255, 255, 255, 0.5);
+        font-style: italic;
+        font-size: 13px;
+        text-align: center;
+        padding: 20px;
+      }
+
       /* === FOOTER === */
       footer {
         background-color: rgba(255, 255, 255, 0.95);
@@ -500,9 +509,9 @@
       <div class="balance-card">
         <div class="balance-header">
           <span>Saldo saat ini</span>
-          <span class="eye-icon">👁️</span>
+          <span class="eye-icon" id="eyeIcon">👁️</span>
         </div>
-        <div class="balance-amount">Rp7.500.000</div>
+        <div class="balance-amount" id="balanceAmount">Memuat...</div>
         <div class="wallet-label">
           <div class="wallet-icon"></div>
           <span>Dompet utama</span>
@@ -538,7 +547,7 @@
 
       <!-- CHART DONUT -->
       <div class="chart-section">
-        <div class="chart-title">Saldo saat ini</div>
+        <div class="chart-title">Ringkasan Keuangan</div>
         <div class="chart-container">
           <canvas id="balanceChart"></canvas>
         </div>
@@ -549,11 +558,7 @@
           </div>
           <div class="legend-item">
             <div class="legend-color" style="background-color: #3498db"></div>
-            <span>Sisa Saldo</span>
-          </div>
-          <div class="legend-item">
-            <div class="legend-color" style="background-color: #f39c12"></div>
-            <span>Investasi</span>
+            <span>Pemasukan</span>
           </div>
         </div>
       </div>
@@ -575,26 +580,19 @@
             <tr>
               <th>Tanggal</th>
               <th>Jenis</th>
-              <th>Kategori</th>
               <th>Jumlah</th>
+              <th>Deskripsi</th>
             </tr>
           </thead>
-          <tbody>
-            <tr class="income">
-              <td>18/1/2026</td>
-              <td>Pemasukan</td>
-              <td>Gaji</td>
-              <td>+Rp1.000.000</td>
-            </tr>
-            <tr class="expense">
-              <td>18/1/2026</td>
-              <td>Pengeluaran</td>
-              <td>Makan</td>
-              <td>-Rp15.000.000</td>
+          <tbody id="transactionBody">
+            <tr>
+              <td colspan="4" class="loading-text">Memuat transaksi...</td>
             </tr>
           </tbody>
         </table>
-        <button class="detail-btn">Klik disini untuk melihat detail ➤</button>
+        <button class="detail-btn" id="detailBtn">
+          Klik disini untuk melihat detail ➤
+        </button>
       </div>
     </div>
 
@@ -613,34 +611,13 @@
       </div>
     </footer>
 
+    <!-- === NON-MODULE SCRIPT: UI INTERACTIONS === -->
     <script>
       // === 🔐 PROTEKSI HALAMAN ===
       const token = localStorage.getItem("token");
-      const user = JSON.parse(localStorage.getItem("user") || "{}");
-
       if (!token) {
         alert("Silakan login terlebih dahulu!");
         window.location.href = "Utama/login.html";
-      }
-
-      // === 👤 TAMPILKAN NAMA USER ===
-      const userName = document.getElementById("userName");
-      const userAvatar = document.getElementById("userAvatar");
-
-      if (user.fullName) {
-        userName.textContent = user.fullName;
-
-        // Ambil inisial nama (misalnya: "John Doe" -> "JD")
-        const nameParts = user.fullName.split(" ");
-        const initials = nameParts
-          .map((part) => part[0])
-          .join("")
-          .toUpperCase()
-          .slice(0, 2);
-        userAvatar.textContent = initials;
-      } else {
-        userName.textContent = user.email || "User";
-        userAvatar.textContent = "U";
       }
 
       // === 📱 TOGGLE DROPDOWN ===
@@ -653,82 +630,165 @@
       window.addEventListener("click", function (e) {
         const dropdown = document.getElementById("dropdownMenu");
         const userInfo = document.querySelector(".user-info");
-
         if (!userInfo.contains(e.target) && !dropdown.contains(e.target)) {
           dropdown.classList.remove("show");
         }
       });
 
       // === 🚪 LOGOUT ===
-      const logoutBtn = document.getElementById("logoutBtn");
-      logoutBtn.addEventListener("click", function () {
-        if (confirm("Yakin ingin keluar?")) {
-          localStorage.removeItem("token");
-          localStorage.removeItem("user");
-          alert("✅ Berhasil logout!");
-          window.location.href = "Utama/login.html";
-        }
-      });
-
-      // === CHART.JS CONFIGURATION ===
-      const chartData = {
-        labels: ["Pengeluaran", "Sisa Saldo", "Investasi"],
-        datasets: [
-          {
-            data: [2500000, 2500000, 2500000],
-            backgroundColor: ["#e74c3c", "#3498db", "#f39c12"],
-            borderWidth: 0,
-          },
-        ],
-      };
-
-      const config = {
-        type: "doughnut",
-        data: chartData,
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              callbacks: {
-                label: function (context) {
-                  let label = context.label || "";
-                  if (label) {
-                    label += ": ";
-                  }
-                  label += "Rp" + context.parsed.toLocaleString("id-ID");
-                  return label;
-                },
-              },
-            },
-          },
-          cutout: "60%",
-        },
-      };
-
-      const balanceChart = new Chart(
-        document.getElementById("balanceChart"),
-        config,
-      );
-
-      // === EVENT LISTENERS ===
       document
-        .querySelector(".eye-icon")
+        .getElementById("logoutBtn")
         .addEventListener("click", function () {
-          const balanceAmount = document.querySelector(".balance-amount");
-          if (balanceAmount.textContent === "Rp7.500.000") {
-            balanceAmount.textContent = "Rp•••••••";
-          } else {
-            balanceAmount.textContent = "Rp7.500.000";
+          if (confirm("Yakin ingin keluar?")) {
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            alert("✅ Berhasil logout!");
+            window.location.href = "Utama/login.html";
           }
         });
 
+      // === 👁️ TOGGLE BALANCE VISIBILITY ===
+      let balanceVisible = true;
+      let rawBalance = "Memuat...";
+
+      document.getElementById("eyeIcon").addEventListener("click", function () {
+        const balanceEl = document.getElementById("balanceAmount");
+        if (balanceVisible) {
+          balanceEl.textContent = "Rp •••••••";
+          balanceVisible = false;
+        } else {
+          balanceEl.textContent = rawBalance;
+          balanceVisible = true;
+        }
+      });
+
+      // === DETAIL TRANSAKSI ===
       document
-        .querySelector(".detail-btn")
+        .getElementById("detailBtn")
         .addEventListener("click", function () {
           window.location.href = "Detail Transaksi/detail-transaksi.html";
         });
+    </script>
+
+    <!-- === MODULE SCRIPT: API INTEGRATION === -->
+    <script type="module">
+      import { authAPI, transactionAPI } from "./js/api.js";
+
+      const userNameEl = document.getElementById("userName");
+      const userAvatarEl = document.getElementById("userAvatar");
+      const balanceAmountEl = document.getElementById("balanceAmount");
+      const transactionBody = document.getElementById("transactionBody");
+
+      let chartInstance = null;
+
+      async function loadDashboard() {
+        try {
+          // ===== PROFILE =====
+          const user = await authAPI.getProfile();
+          const fullName =
+            user.full_name || user.fullName || user.email || "User";
+          userNameEl.textContent = fullName;
+
+          // Avatar inisial
+          const nameParts = fullName.trim().split(" ");
+          const initials = nameParts
+            .map((part) => part[0])
+            .join("")
+            .toUpperCase()
+            .slice(0, 2);
+          userAvatarEl.textContent = initials;
+
+          // ===== SUMMARY =====
+          const summary = await transactionAPI.getSummary();
+          const balanceFormatted =
+            "Rp " + Number(summary.balance).toLocaleString("id-ID");
+
+          // Simpan ke variable global untuk toggle visibility
+          window.rawBalance = balanceFormatted;
+          balanceAmountEl.textContent = balanceFormatted;
+
+          // Patch toggle visibility agar pakai data real
+          window.balanceVisible = true;
+          document.getElementById("eyeIcon").onclick = function () {
+            if (window.balanceVisible) {
+              balanceAmountEl.textContent = "Rp •••••••";
+              window.balanceVisible = false;
+            } else {
+              balanceAmountEl.textContent = window.rawBalance;
+              window.balanceVisible = true;
+            }
+          };
+
+          // ===== CHART =====
+          const ctx = document.getElementById("balanceChart");
+          if (chartInstance) chartInstance.destroy();
+          chartInstance = new Chart(ctx, {
+            type: "doughnut",
+            data: {
+              labels: ["Pengeluaran", "Pemasukan"],
+              datasets: [
+                {
+                  data: [
+                    Number(summary.total_expense) || 0,
+                    Number(summary.total_income) || 0,
+                  ],
+                  backgroundColor: ["#e74c3c", "#3498db"],
+                  borderWidth: 0,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  callbacks: {
+                    label: function (context) {
+                      let label = context.label || "";
+                      if (label) label += ": ";
+                      label +=
+                        "Rp" + Number(context.parsed).toLocaleString("id-ID");
+                      return label;
+                    },
+                  },
+                },
+              },
+              cutout: "60%",
+            },
+          });
+
+          // ===== TRANSACTIONS =====
+          const transactions = await transactionAPI.getAll();
+          transactionBody.innerHTML = "";
+
+          if (!transactions || transactions.length === 0) {
+            transactionBody.innerHTML = `<tr><td colspan="4" class="loading-text">Belum ada transaksi.</td></tr>`;
+            return;
+          }
+
+          transactions.forEach((trx) => {
+            const row = document.createElement("tr");
+            const isIncome = trx.type === "income" || trx.type === "pemasukan";
+            row.className = isIncome ? "income" : "expense";
+            row.innerHTML = `
+              <td>${trx.transaction_date || trx.date || "-"}</td>
+              <td>${isIncome ? "Pemasukan" : "Pengeluaran"}</td>
+              <td>${isIncome ? "+" : "-"}Rp ${Number(trx.amount).toLocaleString("id-ID")}</td>
+              <td>${trx.description || trx.category || "-"}</td>
+            `;
+            transactionBody.appendChild(row);
+          });
+        } catch (err) {
+          console.error(err);
+          alert("Session habis, silakan login ulang.");
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+          window.location.href = "Utama/login.html";
+        }
+      }
+
+      loadDashboard();
     </script>
   </body>
 </html>
