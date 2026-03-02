@@ -356,7 +356,10 @@
           loginBtn.textContent = "Masuk...";
 
           // Call API
-          await authAPI.login(email, password);
+          await authAPI.login({
+            email,
+            password,
+          });
 
           alert("✅ Login berhasil!");
           window.location.href = "../index.html";

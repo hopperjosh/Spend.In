@@ -1,4 +1,4 @@
-const BASE_URL = "/api";
+const BASE_URL = "http://localhost:3000";
 
 // ambil token dari localStorage
 const getToken = () => localStorage.getItem("token");
